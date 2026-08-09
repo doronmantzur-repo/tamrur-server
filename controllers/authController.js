@@ -20,4 +20,21 @@ async function register(req, res, next) {
   }
 }
 
-module.exports = {register};
+async function login(req, res, next) {
+  try {
+    console.log(req.body);
+    const { role, email, password } = req.body;
+
+    if (!email || !password) {
+      throw { status: 400, message: "email or password missing" };
+    }
+
+    const user = await authModel.login({ role, email, password });
+    const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "24h" });
+    res.status(200).json({ user, token });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = {register, login};
