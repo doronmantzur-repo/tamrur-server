@@ -74,4 +74,14 @@ async function update_injury(req, res, next) {
   }
 }
 
-module.exports = { create_injury, update_injury };
+async function get_injuries_by_event(req, res, next) {
+  try {
+    const { eventId } = req.params;
+    const injuries = await injuriesModel.get_injuries_by_event(eventId);
+    res.status(200).json({ injuries });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { create_injury, update_injury, get_injuries_by_event };

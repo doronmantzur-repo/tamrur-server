@@ -47,4 +47,19 @@ async function update_injury(id, updates) {
   return { id, ...updates };
 }
 
-module.exports = { create_injury, update_injury };
+async function get_injuries_by_event(eventId) {
+  const query = "SELECT * FROM injuries WHERE event_id = :eventId;";
+  console.log("eventId:", eventId);
+  // try {
+  //   const [result] = await sequelize.query(query, {
+  //     replacements: { eventId },
+  //   });
+  //   return result;
+  // } catch (error) {
+  //   throw new Error("Error fetching injuries");
+  // }
+
+  return [];
+}
+
+module.exports = { create_injury, update_injury, get_injuries_by_event };
