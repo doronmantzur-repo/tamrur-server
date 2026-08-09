@@ -22,4 +22,26 @@ async function create_event(userData) {
   return userData;
 }
 
-module.exports = { create_event };
+async function update_event(id, updates) {
+  const query =
+    "UPDATE events SET name = COALESCE(:name, name), status = COALESCE(:status, status) WHERE id = :id RETURNING *;";
+  console.log("id:", id);
+  console.log("name:", updates.name);
+  console.log("status:", updates.status);
+  // try {
+  //   const [result] = await sequelize.query(query, {
+  //     replacements: { id, name: updates.name ?? null, status: updates.status ?? null },
+  //   });
+  //   const event = result[0];
+  //   if (!event) {
+  //     throw new Error("Event not found");
+  //   }
+  //   return event;
+  // } catch (error) {
+  //   throw new Error("Error updating event");
+  // }
+
+  return { id, ...updates };
+}
+
+module.exports = { create_event, update_event };
