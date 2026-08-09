@@ -3,10 +3,12 @@ const app = express();
 const port = 8080;
 const authRouter = require("./routes/authRoutes.js");
 const eventRouter = require("./routes/eventsRouts.js");
+const injuriesRouter = require("./routes/injuriesRoutes.js");
 
 app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/events", eventRouter);
+app.use("/injuries", injuriesRouter);
 
 
 app.use((err, req, res, next) => {
