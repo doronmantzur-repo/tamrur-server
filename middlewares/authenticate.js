@@ -2,10 +2,11 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 function authenticate(req, res, next) {
-  const token = req.header("Authorization").replace("Bearer ", "");
-  if (!token) {
+  const authHeader = req.header("Authorization");
+  if (!authHeader) {
     throw { status: 401, message: "Access denied. No token provided." };
   }
+  const token = authHeader.replace("Bearer ", "");
   try {
     const decodedUser = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decodedUser[0]; // add decoded user in the rquest (so other handlers will have the authentication info)
