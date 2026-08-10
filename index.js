@@ -5,12 +5,14 @@ const authRouter = require("./routes/authRoutes.js");
 const eventRouter = require("./routes/eventsRouts.js");
 const injuriesRouter = require("./routes/injuriesRoutes.js");
 const landingPadsRouter = require("./routes/landingPadsRoutes.js");
+const evacuationsRouter = require("./routes/evacuationsRoutes.js");
 
 app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/events", eventRouter);
 app.use("/injuries", injuriesRouter);
 app.use("/landing-pads", landingPadsRouter);
+app.use("/evacuations", evacuationsRouter);
 
 
 app.use((err, req, res, next) => {
