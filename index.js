@@ -8,6 +8,7 @@ const landingPadsRouter = require("./routes/landingPadsRoutes.js");
 const evacuationsRouter = require("./routes/evacuationsRoutes.js");
 const injuriesEvacRouter = require("./routes/injuriesEvacRoutes.js");
 const injuriesTreatmentRouter = require("./routes/injuriesTreatmentRoutes.js");
+const vitalsRouter = require("./routes/vitalsRoutes.js");
 
 app.use(express.json());
 app.use("/auth", authRouter);
@@ -17,6 +18,7 @@ app.use("/landing-pads", landingPadsRouter);
 app.use("/evacuations", evacuationsRouter);
 app.use("/injuries-evac", injuriesEvacRouter);
 app.use("/injuries-treatment", injuriesTreatmentRouter);
+app.use("/vitals", vitalsRouter);
 
 
 app.use((err, req, res, next) => {
