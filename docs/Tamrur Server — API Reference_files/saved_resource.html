@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<!-- saved from url=(0253)https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/?__frame_t=aHE_lkGg-iWDtMbg0itNq5Ro.4119fff2-de3c-439a-918d-5bc2d6e64588.f4c1eada-1428-4273-b0c3-958e460c99ff.1786389298&__frame_v=manifest.8d0051def50d52f9.json -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!-- frame-runtime --><!--<base href="/_f/1786385637-6c47/">--><base href="."><script>window.__FRAME_PREAMBLE={"capabilities":{"assets":"assets.hcOK0ALv.js","comments":"comments.BKZ3qutA.js","db":"db.C8ehi_0m.js","downloads":"downloads.BXsoAvg9.js","mcp":"mcp.CYSdpjo0.js","permissions":"permissions.DdITF2Mk.js","sample":"sample.DpdXn9di.js","self":"self.BN4be5De.js","user":"user.Cr_h1ETf.js"},"transforms":"_transforms.VaITkagF.js","comments":"_comments.CNSvmFji.js","translate":"_translate.BOzFH2D9.js"}</script><script>(function(){"use strict";var ne=["light","dark","system"];function oe(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function W(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function se(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const n=t.theme;return typeof n=="string"&&ne.includes(n)}function ie(e){try{typeof reportError=="function"?reportError(e):setTimeout(()=>{throw e},0)}catch{}}var Y=Object.freeze(Object.assign(Object.create(null),{user:Object.freeze(Object.assign(Object.create(null),{id:null,isOwner:!1,canEdit:!1,name:null,avatarUrl:null,email:null}))})),ae={sample:"sample"};function x(){const e=new Uint8Array(20);try{crypto.getRandomValues(e)}catch{for(let n=0;n<e.length;n++)e[n]=Math.floor(Math.random()*256)}let t="";for(const n of e)t+=(n%36).toString(36);return t}function le(e,t){const n=r=>{const o={path:r},s=r.split("/");return{id:s[s.length-1],path:r,get:()=>t("get",[o]),set:g=>t("set",[o,g]),update:g=>t("update",[o,g]),delete:()=>t("delete",[o]),acquire:g=>t("acquire",[o,g]),onSnapshot:(g,y)=>t("subscribe",[o,g,y]),collection:g=>a(r+"/"+String(g))}},c=r=>({where:(o,s,g)=>c({...r,where:[...r.where??[],{f:String(o),op:String(s),v:g}]}),orderBy:(o,s)=>c({...r,orderBy:{f:String(o),dir:s===void 0?"asc":String(s)}}),limit:o=>c({...r,limit:Number(o)}),get:()=>t("query",[r]),onSnapshot:(o,s)=>t("subscribe",[r,o,s])}),a=r=>({...c({collection:r}),path:r,doc:o=>n(r+"/"+(o===void 0?x():String(o))),add:o=>{const s=n(r+"/"+x());return Promise.resolve(s.set(o)).then(()=>s)}});e.doc=r=>n(String(r)),e.collection=r=>a(String(r))}var ce=Object.freeze([]);function ue(e,t){let n=null,c=null;const a=()=>e.__settled;e.peers=()=>ce,e.connected=()=>!1,e.emit=()=>a()?.()??Promise.resolve(),e.presence=r=>{const o=a();if(o)return o();let s=null;if(r!==null&&typeof r=="object")try{Array.isArray(r)||(s={...r})}catch{}return s===null?Promise.reject({code:"invalid_argument",message:"presence takes an object"}):(n===null&&(n=Object.create(null),c=Promise.resolve(t("presence",[n]))),Object.assign(n,s),c)}}function J(e){if(window===top||e.type==="auxclick"&&e.button!==1)return;const t=e.composedPath?e.composedPath():[e.target];let n=null;for(let o=0;o<t.length;o++){const s=t[o];if(s&&s.matches&&s.matches("a[href],area[href]")){n=s;break}}if(!n&&e.target&&e.target.closest&&(n=e.target.closest("a[href],area[href]")),!n)return;const c=n.getAttribute("href");if(!c)return;let a,r;try{a=new URL(c,document.baseURI),r=new URL(document.baseURI).origin}catch{return}if((a.protocol==="http:"||a.protocol==="https:")&&a.origin!==r){e.preventDefault();const o=(n.getAttribute("target")??document.querySelector("base[target]")?.getAttribute("target")??"").toLowerCase(),s=e.type==="auxclick"||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||!["","_self","_top","_parent"].includes(o);parent.postMessage({__frame_nav:!0,url:a.href,newTab:s},"*")}}var G={};function D(e){if(window===top)return;const t=Date.now();t-(G[e]||0)<500||(G[e]=t,parent.postMessage({__frame_engaged:!0,kind:e},"*"))}var fe=2e3,V=["wheel","touchstart","touchmove","keydown","pointerdown"],X=0;function de(e){e.isTrusted&&(X=Date.now())}function me(){addEventListener("click",J,!0),addEventListener("auxclick",J,!0)}function pe(){for(let e=0;e<V.length;e++)addEventListener(V[e],de,{capture:!0,passive:!0});addEventListener("scroll",e=>{e.isTrusted&&Date.now()-X<fe&&D("scroll")},{capture:!0,passive:!0}),addEventListener("pointermove",e=>{e.isTrusted&&D("pointer")},{capture:!0,passive:!0}),addEventListener("click",e=>{e.isTrusted&&D("click")},{capture:!0,passive:!0})}var I="__frame_scroll",ge=150,he=310,ve=160,_e=3e4;function ye(){let e=0,t=!1,n=!1,c=!1,a=0,r=null;const o=d=>{try{sessionStorage.setItem(I,JSON.stringify({y:d}))}catch{}},s=()=>{if(clearTimeout(e),r===null)return;const d=r;r=null,o(d)},g=()=>{if(t){t=!1;return}n=!0,r=scrollY,clearTimeout(e),e=setTimeout(s,ge)};try{addEventListener("scroll",g,{passive:!0}),addEventListener("pagehide",s)}catch{}const y=()=>{let d;try{d=sessionStorage.getItem(I)}catch{return null}if(d===null)return null;let u;try{u=JSON.parse(d)}catch{u=null}const p=u?.y;if(!(typeof p=="number"&&Number.isFinite(p)&&p>=0)){try{sessionStorage.removeItem(I)}catch{}return null}return p};let l=!1;const f=d=>{try{const u=scrollY;scrollTo({top:d,left:0,behavior:"instant"}),a=d,c=!0,clearTimeout(e),r=null,o(d);const p=scrollY;p!==u&&(t=!0),p!==d&&!l&&(l=!0,addEventListener("load",()=>{try{if(scrollY===p){const _=y();f(_!==null?_:a)}}catch{}},{once:!0}))}catch{}},m=()=>{try{return!!location.hash}catch{return!0}};let h=!1;const v=()=>{try{if(h||innerWidth>he||innerHeight>ve)return;h=!0;const d=Date.now(),u=()=>{try{removeEventListener("resize",u)}catch{}if(Date.now()-d>_e||n||m())return;const p=y();f(p!==null?p:a)};addEventListener("resize",u)}catch{}};let w=!1,S=!1;return{restore(){if(w||(w=!0,m()))return;const d=y();d!==null&&(f(d),v())},promoted(){if(S||(S=!0,m()))return;const d=y();d!==null?(f(d),v()):c&&f(a)}}}function be(e,t,n){const c=[...t.values()].filter(a=>a.targets.some(r=>r.startsWith(e+".")));return{wrap(a,r){const o=`${e}.${a}`,s=c.filter(g=>g.targets.includes(o));return s.length===0?(...g)=>{try{return r(...g)}catch(y){return Promise.reject(y)}}:(...g)=>{let y=g;for(const f of s){const m=f.module.parameters;if(m)try{y=m(y)}catch{return Promise.reject({code:"transform_error",id:f.id,scope:e,message:"parameters transform failed"})}}let l;try{l=r(...y)}catch(f){l=Promise.reject(f)}return l.then(f=>{for(let m=s.length-1;m>=0;m--){const h=s[m],v=h.module.returns;if(v)try{f=v(f)}catch{return n({id:h.id,scope:e,leg:"returns"}),f}}return f},f=>{for(let m=s.length-1;m>=0;m--){const h=s[m],v=h.module.throws;if(v)try{f=v(f)}catch{return n({id:h.id,scope:e,leg:"throws"}),Promise.reject(f)}}return Promise.reject(f)})}}}}function Ee(e,t,n,c=()=>{}){const a=new Set(e.changes??[]),r=new Map;for(const o of a){const s=t[o];s&&r.set(o,s)}return{contract:e.contract,changes:a,flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:r,shellOrigin:n.shellOrigin,mount:n.mount,pipe:o=>be(o,r,c)}}var Re="modulepreload",Me=function(e){return"/"+e},Le={},we=function(t,n,c){let a=Promise.resolve();function r(o){const s=new Event("vite:preloadError",{cancelable:!0});if(s.payload=o,window.dispatchEvent(s),!s.defaultPrevented)throw o}return a.then(o=>{for(const s of o||[])s.status==="rejected"&&r(s.reason);return t().catch(r)})};(function(){const e=Object.defineProperty,t=globalThis,n=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let c=0;for(let a=0;a<n.length;a++){const r=n[a];try{e(t,r,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[r]}catch{}try{e(t,r,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[r]=="function"&&c++}if(c&&window!==top)try{parent.postMessage({__frame_rtc_lockdown_failed:c},"*")}catch{}})();var Se=1e4,Ae=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function Q(e){for(const t of Ae)if(t.endsWith(":*"))try{const n=new URL(e);if(`${n.protocol}//${n.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var k=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),q=window.__FRAME_PREAMBLE?.transforms,z=window.__FRAME_PREAMBLE?.comments,B=window.__FRAME_PREAMBLE?.translate,C=/^[\w.-]+\.js$/,Oe=/^[a-z][a-z0-9_-]{0,63}$/,Z=null,R=null;function $(e,t,n){try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var F=!1;function ee(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,F=!0):F&&(delete t.dataset.theme,t.style.colorScheme="",F=!1)}var te=256,M=Object.assign(Object.create(null),{mcp:Object.assign(Object.create(null),{watchTool:{handlerArg:3}}),db:Object.assign(Object.create(null),{subscribe:{handlerArg:1,errArg:2}}),live:Object.assign(Object.create(null),{on:{handlerArg:1,errArg:2},onPeers:{handlerArg:0,errArg:1},onConnection:{handlerArg:0,errArg:1}})}),je=Object.assign(Object.create(null),{db:(e,t)=>le(e,t),live:(e,t,n)=>ue(e,n)}),L=new Map;function re(e,t){const n=L.get(e);if(!n)return;const c=Object.assign(Object.create(null),t);Object.assign(n.impl,c),n.impl.__settled=()=>Promise.reject({code:"capability_removed",message:`${e}: method not in this runtime`});const a=n.queue;n.queue=[];for(const r of a){const o=c[r.method];if(o)if(M[e]?.[r.method])try{r.resolve(o(...r.args))}catch{T(r,M[e][r.method],{code:"transform_error",message:`${e}.${r.method} rejected its arguments`})}else o(...r.args).then(r.resolve,r.reject);else{const s={code:"capability_removed",message:`${e}.${r.method} is not in this runtime`},g=M[e]?.[r.method];if(g){T(r,g,s);continue}r.reject(s)}}}function Pe(e,t){const n=L.get(e);if(!n)return;n.impl.__settled=()=>Promise.reject(t);const c=n.queue;n.queue=[];for(const a of c){const r=M[e]?.[a.method];if(r){T(a,r,t);continue}a.reject(t)}}function N(e,t){const n=Y[e];if(!n){Pe(e,t);return}re(e,Object.fromEntries(Object.entries(n).map(([c,a])=>[c,()=>Promise.resolve(a)])))}function T(e,t,n){if(e.syncState?.dead)return;const c=t.errArg===void 0?void 0:e.args[t.errArg],a=t.errArg===void 0?e.args[t.handlerArg]:c;typeof a=="function"&&queueMicrotask(()=>{if(!e.syncState?.dead)try{a(t.errArg===void 0?{type:"error",error:n}:n)}catch(r){ie(r)}})}var H=Object.getOwnPropertyDescriptor(window,"claude");if(window!==top&&!(H&&H.writable===!1)){me(),pe();let e=null;try{e=ye()}catch{}const t=H?.value??{};$(window,"claude",t);const n=l=>{const f={impl:Object.create(null),queue:[]};L.set(l,f);const m=f.impl,h=d=>({code:"queue_overflow",message:`${l}.${d}: pre-init call queue is full`}),v=(d,u)=>{if(f.queue.length>=te){const p=Y[l];return p&&d in p?Promise.resolve(p[d]):Promise.reject(h(d))}return new Promise((p,_)=>{f.queue.push({method:d,args:u,resolve:p,reject:_})})},w=ae[l],S=new Proxy(w===void 0?m:(()=>{}),{apply:(d,u,p)=>{const _=w,E=m[_]??m.__settled;return E?E(...p):v(_,p)},get:(d,u)=>{if(typeof u!="string"||u==="then"||u==="toJSON"||u==="valueOf")return;if(u==="toString")return Object.prototype.toString;if(w!==void 0&&(u==="call"||u==="apply"||u==="bind"))return Function.prototype[u];const p=M[l]?.[u];return p?(..._)=>{if(typeof _[p.handlerArg]!="function")throw new TypeError(`${l}.${u} requires a handler function`);const E=m[u];if(E)return E(..._);if(m.__settled){const b={dead:!1},U={args:[..._],syncState:b};return m.__settled().catch(i=>T(U,p,i)),()=>{b.dead=!0}}if(f.queue.length>=te){const b={dead:!1};return T({args:[..._],syncState:b},p,h(u)),()=>{b.dead=!0}}let A=null;const j={dead:!1};return f.queue.push({method:u,args:_,resolve:b=>{A=typeof b=="function"?b:null,j.dead&&A?.()},reject:()=>{},syncState:j}),()=>{j.dead=!0,A?.()}}:(..._)=>{const E=m[u]??m.__settled;return E?E(..._):v(u,_)}},set:()=>!1});je[l]?.(m,(d,u)=>S[d](...u),v),$(t,l,S)};for(const l of Object.keys(k)){if(t[l]!==void 0){$(t,l,t[l]);continue}n(l)}let c=null,a=null,r=0;const o=l=>{l.source!==parent||!Q(l.origin)||oe(l.data)&&(c=l.data.__frame_init,R=l.origin,removeEventListener("message",o),clearTimeout(r),a?.())};addEventListener("message",o),parent.postMessage({__frame_connect:!0},"*");const s=new Promise(l=>{a=l,r=setTimeout(()=>{removeEventListener("message",o),l()},Se)}),g=document.readyState==="loading"?new Promise(l=>document.addEventListener("DOMContentLoaded",()=>l(),{once:!0})):Promise.resolve();g.then(()=>{try{e?.restore()}catch{}});const y=l=>{if(!(l.source!==parent||!Q(l.origin))&&W(l.data)){removeEventListener("message",y);try{e?.promoted()}catch{}}};addEventListener("message",y),s.then(async()=>{if(!c||!R){for(const i of L.keys())N(i,{code:"not_granted",message:"frame initialization did not arrive - capability unavailable"});return}ee(c.theme);const l=R;let f=!1,m=!1;addEventListener("message",i=>{if(i.source!==parent||i.origin!==l)return;se(i.data)&&ee(i.data.__frame_theme.theme);const O=i.data?.__fc_mode;O&&typeof O=="object"&&!f&&z&&C.test(z)&&(f=!0,h(z).then(K=>K.install?.(l,O.on===!0)).catch(()=>{}));const P=i.data?.__ft_cmd;P&&typeof P=="object"&&!m&&B&&C.test(B)&&(m=!0,h(B).then(K=>K.install?.(l,P)).catch(()=>{}))});const h=i=>we(()=>import("/_runtime/"+i),void 0),v=Object.keys(c.capabilities??{});for(const i of v)Object.hasOwn(k,i)||Oe.test(i)&&t[i]===void 0&&(n(i),N(i,{code:"capability_disabled",message:"capability not in this runtime generation"}));const w=v.filter(i=>Object.hasOwn(k,i)).map(i=>[i,k[i]]).filter(i=>typeof i[1]=="string"&&C.test(i[1])),[S,...d]=await Promise.allSettled([q&&C.test(q)?h(q):Promise.resolve({}),...w.map(([,i])=>h(i))]),u=R;Z=Ee(c,S.status==="fulfilled"&&S.value?.TRANSFORMS||{},{shellOrigin:u,mount:re},i=>parent.postMessage({__frame_cap_telemetry:i},u));const p=i=>parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:i}},u),_=Z;d.forEach((i,O)=>{const P=w[O][0];if(i.status!=="fulfilled"){p(P);return}try{i.value?.install?.(_)}catch{p(P)}});for(const[i,O]of L)if(O.impl.__settled===void 0){if(v.includes(i)){N(i,{code:"capability_disabled",message:"capability not available in this session"});continue}N(i,{code:"not_granted",message:"capability not available in this session"})}await g,parent.postMessage({__frame_ready:!0},R);let E=-1,A=0;const j=()=>{A=0;const i=Math.max(document.documentElement.scrollHeight,document.body?document.body.scrollHeight:0);i!==E&&(E=i,parent.postMessage({__frame_size:!0,h:i},u))},b=()=>{A||(A=setTimeout(j,200))},U=new ResizeObserver(b);U.observe(document.documentElement),document.body&&U.observe(document.body),document.addEventListener("load",b,!0),document.fonts?.ready.then(b,()=>{}),addEventListener("beforeprint",()=>{E=-1,j()}),b(),addEventListener("message",i=>{if(!(i.source!==parent||i.origin!==u)&&W(i.data)){try{e?.promoted()}catch{}E=-1,b()}})})}})();</script><!-- /frame-runtime --><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --surface: #ffffff;
+    --surface-raised: #edeae2;
+    --border: #ddd8cc;
+    --text: #1d2126;
+    --text-dim: #5b6470;
+    --accent: #1f7c74;
+    --accent-soft: #e3f1ef;
+    --get: #2e5fc4;
+    --post: #2f8f5c;
+    --put: #b36a22;
+    --danger: #b84f39;
+    --get-soft: #e8edfb;
+    --post-soft: #e6f4ec;
+    --put-soft: #f6ecdf;
+    --danger-soft: #f7e9e5;
+    --radius: 6px;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12151a;
+      --surface: #1a1f27;
+      --surface-raised: #1e242d;
+      --border: #2b323d;
+      --text: #e7e4dd;
+      --text-dim: #9da6b3;
+      --accent: #4bc0b7;
+      --accent-soft: #1b3532;
+      --get: #7ea3f2;
+      --post: #6fcf9a;
+      --put: #e3a15e;
+      --danger: #e08a76;
+      --get-soft: #1c2740;
+      --post-soft: #1a3226;
+      --put-soft: #3a2c18;
+      --danger-soft: #3a2119;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #12151a;
+    --surface: #1a1f27;
+    --surface-raised: #1e242d;
+    --border: #2b323d;
+    --text: #e7e4dd;
+    --text-dim: #9da6b3;
+    --accent: #4bc0b7;
+    --accent-soft: #1b3532;
+    --get: #7ea3f2;
+    --post: #6fcf9a;
+    --put: #e3a15e;
+    --danger: #e08a76;
+    --get-soft: #1c2740;
+    --post-soft: #1a3226;
+    --put-soft: #3a2c18;
+    --danger-soft: #3a2119;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    max-width: 1180px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    grid-column: 1 / -1;
+    padding: 2.75rem 2rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .masthead .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.6rem;
+  }
+  .masthead h1 {
+    font-family: var(--sans);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    font-size: clamp(1.9rem, 3vw, 2.5rem);
+    margin: 0 0 0.5rem;
+    text-wrap: balance;
+  }
+  .masthead p {
+    max-width: 62ch;
+    color: var(--text-dim);
+    margin: 0 0 1.25rem;
+    font-size: 1rem;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+  }
+  .meta-row div { display: flex; gap: 0.5em; }
+  .meta-row .k { color: var(--text-dim); }
+  .meta-row .v { color: var(--text); font-weight: 600; }
+
+  /* ---------- Sidebar nav ---------- */
+  nav.toc {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 1.75rem 1rem 2rem 2rem;
+    border-right: 1px solid var(--border);
+  }
+  nav.toc .group { margin-bottom: 1.4rem; }
+  nav.toc .group-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 0 0 0.4rem;
+  }
+  nav.toc ul { list-style: none; margin: 0; padding: 0; }
+  nav.toc li { margin: 0; }
+  nav.toc a {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.85rem;
+    padding: 0.3rem 0.4rem;
+    border-radius: 4px;
+  }
+  nav.toc a:hover { background: var(--surface-raised); }
+  nav.toc a .m {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 2.6em;
+    flex: none;
+  }
+  nav.toc a .m.get { color: var(--get); }
+  nav.toc a .m.post { color: var(--post); }
+  nav.toc a .m.put { color: var(--put); }
+  nav.toc a .m.delete { color: var(--danger); }
+  nav.toc a .p { font-family: var(--mono); color: var(--text-dim); font-size: 0.8rem; }
+
+  /* ---------- Main column ---------- */
+  main { padding: 2rem 2rem 5rem 2.5rem; min-width: 0; }
+
+  section.resource { margin-bottom: 3.25rem; scroll-margin-top: 1rem; }
+  section.resource > .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 2px solid var(--text);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+  section.resource h2 {
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-weight: 800;
+    margin: 0;
+  }
+  section.resource .table-tag {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+  section.resource > .desc {
+    color: var(--text-dim);
+    max-width: 68ch;
+    margin: 0.6rem 0 1.5rem;
+    font-size: 0.92rem;
+  }
+
+  article.endpoint {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 1.1rem;
+    scroll-margin-top: 1rem;
+    overflow: hidden;
+  }
+  article.endpoint > .bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    padding: 0.25em 0.55em;
+    border-radius: 4px;
+    flex: none;
+  }
+  .badge.get    { color: var(--get);    background: var(--get-soft); }
+  .badge.post   { color: var(--post);   background: var(--post-soft); }
+  .badge.put    { color: var(--put);    background: var(--put-soft); }
+  .badge.delete { color: var(--danger); background: var(--danger-soft); }
+  article.endpoint .path {
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  article.endpoint .path .param { color: var(--accent); }
+  .auth-pill {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.2em 0.65em;
+  }
+  .auth-pill.required { color: var(--accent); border-color: var(--accent); }
+
+  article.endpoint .summary {
+    padding: 0.85rem 1.1rem 0;
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    max-width: 64ch;
+  }
+
+  .panes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    padding: 1rem 1.1rem 1.15rem;
+  }
+  @media (max-width: 760px) {
+    .panes { grid-template-columns: 1fr; }
+  }
+  .pane .pane-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 0 0 0.5rem;
+  }
+
+  table.params {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin-bottom: 0.85rem;
+  }
+  table.params th, table.params td {
+    text-align: left;
+    padding: 0.32rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.params th {
+    font-family: var(--mono);
+    font-weight: 600;
+    color: var(--text-dim);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  table.params td.field { font-family: var(--mono); font-weight: 600; white-space: nowrap; }
+  table.params td.req { color: var(--accent); font-weight: 600; }
+  table.params td.opt { color: var(--text-dim); }
+  table.params tr:last-child td { border-bottom: none; }
+
+  pre.code {
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.7rem 0.85rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+  pre.code .k { color: var(--accent); }
+  pre.code .s { color: var(--post); }
+  pre.code .c { color: var(--text-dim); }
+
+  .status-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+  }
+  .status {
+    font-weight: 700;
+    padding: 0.1em 0.5em;
+    border-radius: 4px;
+  }
+  .status.s2xx { color: var(--post); background: var(--post-soft); }
+  .status.s4xx { color: var(--put); background: var(--put-soft); }
+
+  .note {
+    margin-top: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    border-left: 2px solid var(--accent);
+    padding-left: 0.6rem;
+  }
+  .note code { font-family: var(--mono); font-size: 0.78rem; color: var(--text); }
+
+  .errors-list { padding: 0 1.1rem 1.1rem; margin: 0; }
+  .errors-list .status-row { margin-bottom: 0.35rem; }
+  .errors-list .status-row span.msg { color: var(--text-dim); font-family: var(--sans); }
+
+  code.inline {
+    font-family: var(--mono);
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.05em 0.35em;
+    font-size: 0.85em;
+  }
+
+  .callout {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    font-size: 0.88rem;
+  }
+  .callout h3 {
+    margin: 0 0 0.4rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .callout p { margin: 0 0 0.5rem; color: var(--text); }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .notes-section ul { padding-left: 1.2rem; color: var(--text-dim); font-size: 0.88rem; }
+  .notes-section li { margin-bottom: 0.5rem; }
+
+  footer {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    nav.toc { position: static; border-right: none; border-bottom: 1px solid var(--border); max-height: none; padding: 1.25rem 2rem; }
+    main { padding: 1.5rem; }
+  }
+</style>
+
+<div class="shell">
+
+  <header class="masthead">
+    <p class="eyebrow">Tamrur Server · Internal Reference</p>
+    <h1>API Reference</h1>
+    <p>Mass-casualty-incident coordination backend. An <strong>event</strong> is the incident; <strong>injuries</strong> and <strong>evacuations</strong> are logged against it, and <strong>injuries-evac</strong> is the many-to-many join recording which evacuation(s) each casualty used. <strong>Injuries treatment</strong> and <strong>vitals</strong> hold one record per event each — a running note and a snapshot of readings, not a history log.</p>
+    <div class="meta-row">
+      <div><span class="k">Base URL</span><span class="v">http://localhost:8080</span></div>
+      <div><span class="k">Format</span><span class="v">application/json</span></div>
+      <div><span class="k">Auth</span><span class="v">Bearer JWT</span></div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Endpoint index">
+    <div class="group">
+      <p class="group-label">Auth</p>
+      <ul>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#auth-register"><span class="m post">POST</span><span class="p">/auth/register</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#auth-login"><span class="m post">POST</span><span class="p">/auth/login</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <p class="group-label">Events</p>
+      <ul>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#events-post"><span class="m post">POST</span><span class="p">/events</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#events-put"><span class="m put">PUT</span><span class="p">/events/:id</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <p class="group-label">Injuries</p>
+      <ul>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#injuries-post"><span class="m post">POST</span><span class="p">/injuries</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#injuries-put"><span class="m put">PUT</span><span class="p">/injuries/:id</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#injuries-get"><span class="m get">GET</span><span class="p">/injuries/:eventId</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <p class="group-label">Evacuations</p>
+      <ul>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#evac-post"><span class="m post">POST</span><span class="p">/evacuations</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#evac-put"><span class="m put">PUT</span><span class="p">/evacuations/:id</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#evac-get"><span class="m get">GET</span><span class="p">/evacuations/:eventId</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <p class="group-label">Injuries ↔ Evac</p>
+      <ul>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#ie-post"><span class="m post">POST</span><span class="p">/injuries-evac</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#ie-put"><span class="m put">PUT</span><span class="p">/injuries-evac/:id</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#ie-get"><span class="m get">GET</span><span class="p">/injuries-evac/:eventId</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <p class="group-label">Injuries Treatment</p>
+      <ul>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#it-post"><span class="m post">POST</span><span class="p">/injuries-treatment</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#it-put"><span class="m put">PUT</span><span class="p">/injuries-treatment/:eventId</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#it-delete"><span class="m delete">DEL</span><span class="p">/injuries-treatment/:eventId</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#it-get"><span class="m get">GET</span><span class="p">/injuries-treatment/:eventId</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <p class="group-label">Vitals</p>
+      <ul>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#vitals-post"><span class="m post">POST</span><span class="p">/vitals</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#vitals-put"><span class="m put">PUT</span><span class="p">/vitals/:eventId</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#vitals-delete"><span class="m delete">DEL</span><span class="p">/vitals/:eventId</span></a></li>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#vitals-get"><span class="m get">GET</span><span class="p">/vitals/:eventId</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <p class="group-label">Landing Pads</p>
+      <ul>
+        <li><a href="https://10f1d0a5-ea16-4c7d-9bf7-ef2cfbbb1d2c.frame.claudeusercontent.com/_f/1786385637-6c47/#pads-get"><span class="m get">GET</span><span class="p">/landing-pads</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+    <div class="callout">
+      <h3>Authentication</h3>
+      <p>Every route below except <code class="inline">/auth/register</code> and <code class="inline">/auth/login</code> requires <code class="inline">Authorization: Bearer &lt;token&gt;</code>. Tokens are issued by login/register, are signed HS256, and expire after 24h.</p>
+      <p>All errors share one shape from a central handler: <code class="inline">{ "error": true, "message": string, "statusCode": number }</code> — shown per-endpoint below only where the status code or message is specific to that route.</p>
+    </div>
+
+    <!-- ===================== AUTH ===================== -->
+    <section class="resource" id="auth">
+      <div class="head">
+        <h2>Auth</h2>
+        <span class="table-tag">public.users · auth.users</span>
+      </div>
+      <p class="desc">Registration and login against Supabase Auth. The returned JWT wraps the caller's <code class="inline">public.users</code> profile row (password stripped) and is what every other route expects as a Bearer token.</p>
+
+      <article class="endpoint" id="auth-register">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/auth/register</span>
+          <span class="auth-pill">no auth</span>
+        </div>
+        <p class="summary">Creates a Supabase Auth user, which triggers creation of the matching <code class="inline">public.users</code> profile row.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">email</td><td>string</td><td class="req">required</td></tr>
+                <tr><td class="field">password</td><td>string</td><td class="req">required</td></tr>
+                <tr><td class="field">role</td><td>string</td><td class="opt">optional</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{
+  <span class="k">"email"</span>: <span class="s">"medic1@example.com"</span>,
+  <span class="k">"password"</span>: <span class="s">"1234567"</span>,
+  <span class="k">"role"</span>: <span class="s">"medic"</span>
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"user"</span>: { <span class="c">...public.users row, no password</span> },
+  <span class="k">"token"</span>: <span class="s">"eyJhbGciOi..."</span>
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg" style="font-family:var(--sans);color:var(--text-dim)">email or password missing</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="auth-login">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/auth/login</span>
+          <span class="auth-pill">no auth</span>
+        </div>
+        <p class="summary">Verifies credentials against Supabase Auth and returns the matching profile row plus a fresh token.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">email</td><td>string</td><td class="req">required</td></tr>
+                <tr><td class="field">password</td><td>string</td><td class="req">required</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{
+  <span class="k">"email"</span>: <span class="s">"medic1@example.com"</span>,
+  <span class="k">"password"</span>: <span class="s">"1234567"</span>
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"user"</span>: {...}, <span class="k">"token"</span>: <span class="s">"eyJhbGciOi..."</span> }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">email or password missing</span></div>
+            <div class="status-row"><span class="status s4xx">401</span><span class="msg">Invalid email or password</span></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== EVENTS ===================== -->
+    <section class="resource" id="events">
+      <div class="head">
+        <h2>Events</h2>
+        <span class="table-tag">public.events</span>
+      </div>
+      <p class="desc">The incident record everything else hangs off of. No list/read route is exposed yet — only create and update.</p>
+
+      <article class="endpoint" id="events-post">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/events</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary"><code class="inline">status</code> is always set to <code class="inline">evaluated</code> server-side; it cannot be set on create.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">name</td><td>string</td><td class="opt">optional</td></tr>
+                <tr><td class="field">type</td><td>enum</td><td class="req">required</td></tr>
+                <tr><td class="field">location</td><td>GeoJSON Point</td><td class="req">required</td></tr>
+              </tbody>
+            </table>
+            <p class="note"><code>type</code>: explosive · gunfire · mortar · anti-tank · phosphorus</p>
+            <pre class="code">{
+  <span class="k">"name"</span>: <span class="s">"Battalion 224 event"</span>,
+  <span class="k">"type"</span>: <span class="s">"gunfire"</span>,
+  <span class="k">"location"</span>: {
+    <span class="k">"type"</span>: <span class="s">"Point"</span>,
+    <span class="k">"coordinates"</span>: [35.2967, 32.7018]
+  }
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"event"</span>: {
+    <span class="k">"id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"created_at"</span>: <span class="s">"2026-08-10T07:19:55Z"</span>,
+    <span class="k">"name"</span>: <span class="s">"Battalion 224 event"</span>,
+    <span class="k">"type"</span>: <span class="s">"gunfire"</span>,
+    <span class="k">"location"</span>: { <span class="c">GeoJSON Point</span> },
+    <span class="k">"status"</span>: <span class="s">"evaluated"</span>,
+    <span class="k">"closure_at"</span>: null
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">type or location missing</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="events-put">
+        <div class="bar">
+          <span class="badge put">PUT</span>
+          <span class="path">/events/<span class="param">:id</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Partial update — only fields you send are changed.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body — one or both</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody>
+                <tr><td class="field">name</td><td>string</td></tr>
+                <tr><td class="field">status</td><td>enum</td></tr>
+              </tbody>
+            </table>
+            <p class="note"><code>status</code> (DB enum, not validated by the controller): evaluated · controlled · ready_for_evacuation · evacuation_started · completed</p>
+            <pre class="code">{ <span class="k">"status"</span>: <span class="s">"controlled"</span> }</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"event"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">name or status required</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Event not found</span></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== INJURIES ===================== -->
+    <section class="resource" id="injuries">
+      <div class="head">
+        <h2>Injuries</h2>
+        <span class="table-tag">public.injuries</span>
+      </div>
+      <p class="desc">One casualty record per injury, scoped to an event. Several DB columns are hyphenated (<code class="inline">"event-id"</code>, <code class="inline">"evac-abillity"</code> — typo kept as-is in the schema) and come back exactly as spelled.</p>
+
+      <article class="endpoint" id="injuries-post">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/injuries</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary"><code class="inline">id</code> is generated by Postgres — you link to the event instead of supplying an id.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">eventId</td><td>uuid</td><td class="req">required</td></tr>
+                <tr><td class="field">urgency</td><td>enum</td><td class="opt">optional</td></tr>
+              </tbody>
+            </table>
+            <p class="note"><code>urgency</code>: non-urgent · urgent · expectant · deceased</p>
+            <pre class="code">{
+  <span class="k">"eventId"</span>: <span class="s">"&lt;event uuid&gt;"</span>,
+  <span class="k">"urgency"</span>: <span class="s">"urgent"</span>
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"injury"</span>: {
+    <span class="k">"id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"event-id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"created_at"</span>: <span class="s">"..."</span>,
+    <span class="k">"urgency"</span>: <span class="s">"urgent"</span>,
+    <span class="k">"evac-priority"</span>: null,
+    <span class="k">"escort"</span>: null,
+    <span class="k">"recommended-evac-dest"</span>: null,
+    <span class="k">"evac-abillity"</span>: null,
+    <span class="k">"evac-ready"</span>: null
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">eventId missing</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="injuries-put">
+        <div class="bar">
+          <span class="badge put">PUT</span>
+          <span class="path">/injuries/<span class="param">:id</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Partial update, at least one field. Body keys stay hyphenated to match the columns they map to.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body — any of</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody>
+                <tr><td class="field">urgency</td><td>enum</td></tr>
+                <tr><td class="field">escort</td><td>boolean</td></tr>
+                <tr><td class="field">dest-evac-recommend</td><td>string</td></tr>
+                <tr><td class="field">evac-ability</td><td>enum</td></tr>
+                <tr><td class="field">evac-ready</td><td>boolean</td></tr>
+              </tbody>
+            </table>
+            <p class="note"><code>evac-ability</code>: walk · sit · lie</p>
+            <pre class="code">{
+  <span class="k">"escort"</span>: true,
+  <span class="k">"evac-ability"</span>: <span class="s">"walk"</span>
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injury"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Injury not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="injuries-get">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/injuries/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">All injuries logged against one event.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injuries"</span>: [ { <span class="c">...</span> }, { <span class="c">...</span> } ] }</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== EVACUATIONS ===================== -->
+    <section class="resource" id="evacuations">
+      <div class="head">
+        <h2>Evacuations</h2>
+        <span class="table-tag">public.evacuations</span>
+      </div>
+      <p class="desc">A transport out of the event — on foot, by vehicle, or aerial. <code class="inline">departurePoint</code>/<code class="inline">destinationPoint</code> are GeoJSON Points, same shape both directions.</p>
+
+      <article class="endpoint" id="evac-post">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/evacuations</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Only <code class="inline">eventId</code> is required; <code class="inline">status</code> starts at <code class="inline">not_started</code> automatically.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">eventId</td><td>uuid</td><td class="req">required</td></tr>
+                <tr><td class="field">method</td><td>enum</td><td class="opt">optional</td></tr>
+                <tr><td class="field">departurePoint</td><td>GeoJSON Point</td><td class="opt">optional</td></tr>
+                <tr><td class="field">forceRadioSign</td><td>string</td><td class="opt">optional</td></tr>
+                <tr><td class="field">startTime</td><td>ISO datetime</td><td class="opt">optional</td></tr>
+                <tr><td class="field">eta</td><td>ISO datetime</td><td class="opt">optional</td></tr>
+                <tr><td class="field">aerialMissionId</td><td>string</td><td class="opt">optional</td></tr>
+                <tr><td class="field">destinationPoint</td><td>GeoJSON Point</td><td class="opt">optional</td></tr>
+              </tbody>
+            </table>
+            <p class="note"><code>method</code>: walk · ride · aerial</p>
+            <pre class="code">{
+  <span class="k">"eventId"</span>: <span class="s">"&lt;event uuid&gt;"</span>,
+  <span class="k">"method"</span>: <span class="s">"aerial"</span>,
+  <span class="k">"destinationPoint"</span>: {
+    <span class="k">"type"</span>: <span class="s">"Point"</span>,
+    <span class="k">"coordinates"</span>: [35.22, 31.77]
+  }
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"evacuation"</span>: {
+    <span class="k">"id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"event-id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"created_at"</span>: <span class="s">"..."</span>,
+    <span class="k">"method"</span>: <span class="s">"aerial"</span>,
+    <span class="k">"departure_point"</span>: null,
+    <span class="k">"force_radio_sign"</span>: null,
+    <span class="k">"status"</span>: <span class="s">"not_started"</span>,
+    <span class="k">"start_time"</span>: null,
+    <span class="k">"eta"</span>: null,
+    <span class="k">"concluded_at"</span>: null,
+    <span class="k">"aerial_mission_id"</span>: null,
+    <span class="k">"destination_point"</span>: { <span class="c">GeoJSON Point</span> }
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">eventId missing</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="evac-put">
+        <div class="bar">
+          <span class="badge put">PUT</span>
+          <span class="path">/evacuations/<span class="param">:id</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Partial update, at least one field.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body — any of</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody>
+                <tr><td class="field">method</td><td>enum</td></tr>
+                <tr><td class="field">departurePoint</td><td>GeoJSON Point</td></tr>
+                <tr><td class="field">forceRadioSign</td><td>string</td></tr>
+                <tr><td class="field">status</td><td>enum</td></tr>
+                <tr><td class="field">startTime</td><td>ISO datetime</td></tr>
+                <tr><td class="field">eta</td><td>ISO datetime</td></tr>
+                <tr><td class="field">concludedAt</td><td>ISO datetime</td></tr>
+                <tr><td class="field">aerialMissionId</td><td>string</td></tr>
+                <tr><td class="field">destinationPoint</td><td>GeoJSON Point</td></tr>
+              </tbody>
+            </table>
+            <p class="note"><code>status</code>: not_started · started · completed</p>
+            <pre class="code">{ <span class="k">"status"</span>: <span class="s">"started"</span>, <span class="k">"forceRadioSign"</span>: <span class="s">"Eagle-1"</span> }</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"evacuation"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Evacuation not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="evac-get">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/evacuations/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">All evacuations logged against one event, newest first.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"evacuations"</span>: [ { <span class="c">...</span> } ] }</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== INJURIES-EVAC ===================== -->
+    <section class="resource" id="injuries-evac">
+      <div class="head">
+        <h2>Injuries ↔ Evac</h2>
+        <span class="table-tag">public."injuries-evac"</span>
+      </div>
+      <p class="desc">Join table linking one injury to one evacuation within an event. An injury can have several rows here if it used more than one evacuation.</p>
+
+      <article class="endpoint" id="ie-post">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/injuries-evac</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Creates one link row. All three ids are foreign keys and must already exist.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">eventId</td><td>uuid</td><td class="req">required</td></tr>
+                <tr><td class="field">injuryId</td><td>uuid</td><td class="req">required</td></tr>
+                <tr><td class="field">evacuationId</td><td>uuid</td><td class="req">required</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{
+  <span class="k">"eventId"</span>: <span class="s">"&lt;event uuid&gt;"</span>,
+  <span class="k">"injuryId"</span>: <span class="s">"&lt;injury uuid&gt;"</span>,
+  <span class="k">"evacuationId"</span>: <span class="s">"&lt;evacuation uuid&gt;"</span>
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"injuryEvac"</span>: {
+    <span class="k">"id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"created_at"</span>: <span class="s">"..."</span>,
+    <span class="k">"event"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"injurey"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"evacuation"</span>: <span class="s">"uuid"</span>
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">eventId, injuryId and evacuationId are required</span></div>
+            <p class="note">Response key is spelled <code>injurey</code>, matching the column name in the schema.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="ie-put">
+        <div class="bar">
+          <span class="badge put">PUT</span>
+          <span class="path">/injuries-evac/<span class="param">:id</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Repoint a link at a different event / injury / evacuation. At least one field.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body — any of</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody>
+                <tr><td class="field">eventId</td><td>uuid</td></tr>
+                <tr><td class="field">injuryId</td><td>uuid</td></tr>
+                <tr><td class="field">evacuationId</td><td>uuid</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{ <span class="k">"evacuationId"</span>: <span class="s">"&lt;different evacuation uuid&gt;"</span> }</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injuryEvac"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Injury-evacuation link not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="ie-get">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/injuries-evac/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">All injury–evacuation links for one event, newest first.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injuryEvacLinks"</span>: [ { <span class="c">...</span> } ] }</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== INJURIES TREATMENT ===================== -->
+    <section class="resource" id="injuries-treatment">
+      <div class="head">
+        <h2>Injuries Treatment</h2>
+        <span class="table-tag">public."injuries-treatment"</span>
+      </div>
+      <p class="desc">Treatment notes for an event. The primary key is <code class="inline">"event-id"</code> itself — there's no separate row id, which means <strong>at most one treatment record can exist per event</strong>. A second <code class="inline">POST</code> for the same event fails; use <code class="inline">PUT</code> to update it instead.</p>
+
+      <article class="endpoint" id="it-post">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/injuries-treatment</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Creates the event's single treatment record. Only <code class="inline">eventId</code> is required.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">eventId</td><td>uuid</td><td class="req">required</td></tr>
+                <tr><td class="field">injuryId</td><td>uuid</td><td class="opt">optional</td></tr>
+                <tr><td class="field">treatment</td><td>string</td><td class="opt">optional</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{
+  <span class="k">"eventId"</span>: <span class="s">"&lt;event uuid&gt;"</span>,
+  <span class="k">"injuryId"</span>: <span class="s">"&lt;injury uuid&gt;"</span>,
+  <span class="k">"treatment"</span>: <span class="s">"Tourniquet applied"</span>
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"injuryTreatment"</span>: {
+    <span class="k">"event-id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"created_at"</span>: <span class="s">"..."</span>,
+    <span class="k">"injury-id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"treatment"</span>: <span class="s">"Tourniquet applied"</span>
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">eventId missing</span></div>
+            <p class="note">A second POST for an event that already has a record fails on the primary-key constraint (generic 500, same as any other unhandled DB error in this API).</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="it-put">
+        <div class="bar">
+          <span class="badge put">PUT</span>
+          <span class="path">/injuries-treatment/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Partial update, at least one field. The path param is the event id, not a row id.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body — either</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody>
+                <tr><td class="field">injuryId</td><td>uuid</td></tr>
+                <tr><td class="field">treatment</td><td>string</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{ <span class="k">"treatment"</span>: <span class="s">"IV fluids started"</span> }</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injuryTreatment"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Injury treatment record not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="it-delete">
+        <div class="bar">
+          <span class="badge delete">DELETE</span>
+          <span class="path">/injuries-treatment/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Deletes the event's treatment record and returns it.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injuryTreatment"</span>: { <span class="c">...deleted row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Injury treatment record not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="it-get">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/injuries-treatment/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Returns the event's treatment record, or <code class="inline">null</code> if none has been logged — that's a normal state, not an error.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injuryTreatment"</span>: { <span class="c">...</span> } }</pre>
+            <pre class="code" style="margin-top:.4rem">{ <span class="k">"injuryTreatment"</span>: null }</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== VITALS ===================== -->
+    <section class="resource" id="vitals">
+      <div class="head">
+        <h2>Vitals</h2>
+        <span class="table-tag">public.vitals</span>
+      </div>
+      <p class="desc">Same shape as Injuries Treatment: primary key is <code class="inline">"event-id"</code>, so <strong>at most one vitals record per event</strong>. <code class="inline">bloodPressure</code> maps to a <code class="inline">jsonb</code> column with no enforced structure — send whatever object shape you want.</p>
+
+      <article class="endpoint" id="vitals-post">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/vitals</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Only <code class="inline">eventId</code> is required; every reading is optional.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">eventId</td><td>uuid</td><td class="req">required</td></tr>
+                <tr><td class="field">injuryId</td><td>uuid</td><td class="opt">optional</td></tr>
+                <tr><td class="field">pulse</td><td>smallint</td><td class="opt">optional</td></tr>
+                <tr><td class="field">bloodPressure</td><td>jsonb</td><td class="opt">optional</td></tr>
+                <tr><td class="field">spo2</td><td>smallint</td><td class="opt">optional</td></tr>
+                <tr><td class="field">respiratoryRate</td><td>smallint</td><td class="opt">optional</td></tr>
+                <tr><td class="field">oralTemperature</td><td>smallint</td><td class="opt">optional</td></tr>
+                <tr><td class="field">rectalTemperature</td><td>smallint</td><td class="opt">optional</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{
+  <span class="k">"eventId"</span>: <span class="s">"&lt;event uuid&gt;"</span>,
+  <span class="k">"pulse"</span>: 88,
+  <span class="k">"bloodPressure"</span>: { <span class="k">"systolic"</span>: 120, <span class="k">"diastolic"</span>: 80 },
+  <span class="k">"spo2"</span>: 97
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"vitals"</span>: {
+    <span class="k">"event-id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"created_at"</span>: <span class="s">"..."</span>,
+    <span class="k">"injury-id"</span>: null,
+    <span class="k">"pulse"</span>: 88,
+    <span class="k">"blood-pressure"</span>: { <span class="k">"systolic"</span>: 120, <span class="k">"diastolic"</span>: 80 },
+    <span class="k">"spo2"</span>: 97,
+    <span class="k">"repiratory-rate"</span>: null,
+    <span class="k">"oral-temperature"</span>: null,
+    <span class="k">"rectal-temperature"</span>: null
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">eventId missing</span></div>
+            <p class="note">Response key is spelled <code>repiratory-rate</code>, matching the column name in the schema (typo kept as-is).</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="vitals-put">
+        <div class="bar">
+          <span class="badge put">PUT</span>
+          <span class="path">/vitals/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Partial update, at least one field.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body — any of</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody>
+                <tr><td class="field">injuryId</td><td>uuid</td></tr>
+                <tr><td class="field">pulse</td><td>smallint</td></tr>
+                <tr><td class="field">bloodPressure</td><td>jsonb</td></tr>
+                <tr><td class="field">spo2</td><td>smallint</td></tr>
+                <tr><td class="field">respiratoryRate</td><td>smallint</td></tr>
+                <tr><td class="field">oralTemperature</td><td>smallint</td></tr>
+                <tr><td class="field">rectalTemperature</td><td>smallint</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{ <span class="k">"spo2"</span>: 95, <span class="k">"respiratoryRate"</span>: 22 }</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"vitals"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Vitals record not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="vitals-delete">
+        <div class="bar">
+          <span class="badge delete">DELETE</span>
+          <span class="path">/vitals/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Deletes the event's vitals record and returns it.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"vitals"</span>: { <span class="c">...deleted row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Vitals record not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="vitals-get">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/vitals/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Returns the event's vitals record, or <code class="inline">null</code> if none logged yet.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"vitals"</span>: { <span class="c">...</span> } }</pre>
+            <pre class="code" style="margin-top:.4rem">{ <span class="k">"vitals"</span>: null }</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== LANDING PADS ===================== -->
+    <section class="resource" id="landing-pads">
+      <div class="head">
+        <h2>Landing Pads</h2>
+        <span class="table-tag">public.landing_pads</span>
+      </div>
+      <p class="desc">Read-only reference list. No POST/PUT route exists for this table yet.</p>
+
+      <article class="endpoint" id="pads-get">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/landing-pads</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Returns every landing pad row as-is.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request</p>
+            <p class="note" style="margin-top:0">No parameters.</p>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{
+  <span class="k">"landingPads"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"1"</span>,
+      <span class="k">"name"</span>: <span class="s">"LP_001"</span>,
+      <span class="k">"is_ok"</span>: true,
+      <span class="k">"status_update"</span>: <span class="s">"..."</span>,
+      <span class="k">"location"</span>: { <span class="c">GeoJSON Point</span> }
+    }
+  ]
+}</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="notes-section">
+      <div class="head" style="border-bottom:2px solid var(--text); padding-bottom:.5rem; margin-bottom:.8rem;">
+        <h2 style="font-size:1.15rem; text-transform:uppercase; letter-spacing:.03em; font-weight:800; margin:0;">Notes</h2>
+      </div>
+      <ul>
+        <li>Enum fields (<code class="inline">type</code>, <code class="inline">status</code>, <code class="inline">urgency</code>, <code class="inline">method</code>, <code class="inline">evac-ability</code>) are enforced by Postgres. An invalid value fails the insert/update and surfaces as a generic <code class="inline">500</code>, not a <code class="inline">400</code>, unless the controller validates it first (noted per field above where it does).</li>
+        <li>GeoJSON Points round-trip: send <code class="inline">{ "type": "Point", "coordinates": [lng, lat] }</code>, get the same shape back (longitude first, per GeoJSON — not lat/lng).</li>
+        <li>Column names containing a hyphen (<code class="inline">"event-id"</code>, <code class="inline">"evac-abillity"</code>, <code class="inline">"recommended-evac-dest"</code>, <code class="inline">"evac-ready"</code>, <code class="inline">"repiratory-rate"</code>) appear exactly that way in JSON responses.</li>
+        <li>Injuries Treatment and Vitals both use <code class="inline">"event-id"</code> as their primary key (no separate row id), so each event can have at most one record in either table. Update in place with <code class="inline">PUT</code> rather than creating a new one.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>tamrur-server · generated from the current route/controller/model source, not a spec written ahead of the code</footer>
+
+</div>
+
+</body></html>
