@@ -39,13 +39,13 @@ async function update_event(req, res, next) {
   try {
     console.log(req.body);
     const { id } = req.params;
-    const { name, status } = req.body;
+    const { name, status, closure_at, type, location } = req.body;
 
-    if (!name && !status) {
-      throw { status: 400, message: "name or status required" };
+    if (!name && !status && !closure_at && !type && !location) {
+      throw { status: 400, message: "name, status, closure_at, type or location required" };
     }
 
-    const event = await eventsModel.update_event(id, { name, status });
+    const event = await eventsModel.update_event(id, { name, status, closure_at, type, location });
     res.status(200).json({ event });
   } catch (err) {
     next(err);
