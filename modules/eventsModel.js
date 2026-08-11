@@ -17,6 +17,17 @@ async function create_event(eventData) {
   }
 }
 
+async function list_events() {
+  const query =
+    "SELECT id, name, type, status, ST_AsGeoJSON(location)::json AS location, created_at, closure_at FROM events ORDER BY created_at DESC;";
+  try {
+    const [result] = await sequelize.query(query);
+    return result;
+  } catch (error) {
+    throw new Error("Error fetching events");
+  }
+}
+
 async function get_event_by_id(id) {
   const query =
     "SELECT id, name, type, status, ST_AsGeoJSON(location)::json AS location, created_at, closure_at FROM events WHERE id = :id;";
@@ -53,4 +64,4 @@ async function update_event(id, updates) {
   }
 }
 
-module.exports = { create_event, get_event_by_id, update_event };
+module.exports = { create_event, list_events, get_event_by_id, update_event };
