@@ -16,6 +16,16 @@ async function create_event(req, res, next) {
   }
 }
 
+async function get_event_by_id(req, res, next) {
+  try {
+    const { id } = req.params;
+    const event = await eventsModel.get_event_by_id(id);
+    res.status(200).json({ event });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function update_event(req, res, next) {
   try {
     console.log(req.body);
@@ -33,4 +43,4 @@ async function update_event(req, res, next) {
   }
 }
 
-module.exports = { create_event, update_event };
+module.exports = { create_event, get_event_by_id, update_event };

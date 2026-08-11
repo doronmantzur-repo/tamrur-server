@@ -17,6 +17,24 @@ async function create_event(eventData) {
   }
 }
 
+async function get_event_by_id(id) {
+  const query =
+    "SELECT id, name, type, status, ST_AsGeoJSON(location)::json AS location, created_at, closure_at FROM events WHERE id = :id;";
+  try {
+    const [result] = await sequelize.query(query, {
+      replacements: { id },
+    });
+    const event = result[0];
+    if (!event) {
+      throw { status: 404, message: "Event not found" };
+    }
+    return event;
+  } catch (error) {
+    if (error.status) throw error;
+    throw new Error("Error fetching event");
+  }
+}
+
 async function update_event(id, updates) {
   const query =
     "UPDATE events SET name = COALESCE(:name, name), status = COALESCE(:status, status) WHERE id = :id RETURNING *;";
@@ -35,4 +53,4 @@ async function update_event(id, updates) {
   }
 }
 
-module.exports = { create_event, update_event };
+module.exports = { create_event, get_event_by_id, update_event };
