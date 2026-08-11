@@ -2,10 +2,18 @@ const { sequelize } = require("../db/models");
 
 async function create_injury(injuryData) {
   const query =
-    'INSERT INTO injuries ("event-id", urgency) VALUES (:eventId, :urgency) RETURNING *;';
+    'INSERT INTO injuries ("event-id", urgency, "evac-priority", escort, "recommended-evac-dest", "evac-ability", "evac-ready") VALUES (:eventId, :urgency, :evacPriority, :escort, :destEvacRecommend, :evacAbility, :evacReady) RETURNING *;';
   try {
     const [result] = await sequelize.query(query, {
-      replacements: { eventId: injuryData.eventId, urgency: injuryData.urgency ?? null },
+      replacements: {
+        eventId: injuryData.eventId,
+        urgency: injuryData.urgency ?? null,
+        evacPriority: injuryData.evacPriority ?? null,
+        escort: injuryData.escort ?? null,
+        destEvacRecommend: injuryData.destEvacRecommend ?? null,
+        evacAbility: injuryData.evacAbility ?? null,
+        evacReady: injuryData.evacReady ?? null,
+      },
     });
     return result[0];
   } catch (error) {
@@ -15,12 +23,13 @@ async function create_injury(injuryData) {
 
 async function update_injury(id, updates) {
   const query =
-    'UPDATE injuries SET urgency = COALESCE(:urgency, urgency), escort = COALESCE(:escort, escort), "recommended-evac-dest" = COALESCE(:destEvacRecommend, "recommended-evac-dest"), "evac-abillity" = COALESCE(:evacAbility, "evac-abillity"), "evac-ready" = COALESCE(:evacReady, "evac-ready") WHERE id = :id RETURNING *;';
+    'UPDATE injuries SET urgency = COALESCE(:urgency, urgency), "evac-priority" = COALESCE(:evacPriority, "evac-priority"), escort = COALESCE(:escort, escort), "recommended-evac-dest" = COALESCE(:destEvacRecommend, "recommended-evac-dest"), "evac-ability" = COALESCE(:evacAbility, "evac-ability"), "evac-ready" = COALESCE(:evacReady, "evac-ready") WHERE id = :id RETURNING *;';
   try {
     const [result] = await sequelize.query(query, {
       replacements: {
         id,
         urgency: updates.urgency ?? null,
+        evacPriority: updates.evacPriority ?? null,
         escort: updates.escort ?? null,
         destEvacRecommend: updates.destEvacRecommend ?? null,
         evacAbility: updates.evacAbility ?? null,
