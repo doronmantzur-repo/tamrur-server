@@ -428,6 +428,14 @@
         <li><a href="#pads-get"><span class="m get">GET</span><span class="p">/landing-pads</span></a></li>
       </ul>
     </div>
+    <div class="group">
+      <p class="group-label">Aerial Mission</p>
+      <ul>
+        <li><a href="#am-post"><span class="m post">POST</span><span class="p">/aerial-mission</span></a></li>
+        <li><a href="#am-put"><span class="m put">PUT</span><span class="p">/aerial-mission/:id</span></a></li>
+        <li><a href="#am-list"><span class="m get">GET</span><span class="p">/aerial-mission</span></a></li>
+      </ul>
+    </div>
   </nav>
 
   <main>
@@ -1298,12 +1306,115 @@
       </article>
     </section>
 
+    <!-- ===================== AERIAL MISSION ===================== -->
+    <section class="resource" id="aerial-mission">
+      <div class="head">
+        <h2>Aerial Mission</h2>
+        <span class="table-tag">public.aerial_mission</span>
+      </div>
+      <p class="desc">A helicopter/aerial evac request tied to a landing pad. Not scoped to an event &mdash; <code class="inline">GET</code> returns every mission, newest first.</p>
+
+      <article class="endpoint" id="am-post">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/aerial-mission</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">All fields are optional &mdash; every column but <code class="inline">id</code>/<code class="inline">created_at</code> is nullable.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">radioSign</td><td>string</td><td class="opt">optional</td></tr>
+                <tr><td class="field">landingPadId</td><td>number</td><td class="opt">optional</td></tr>
+                <tr><td class="field">requestStatus</td><td>enum</td><td class="opt">optional</td></tr>
+              </tbody>
+            </table>
+            <p class="note"><code>requestStatus</code> (DB enum, validated by the controller): no_neede &middot; needed &middot; in_progress &middot; approved &middot; denied</p>
+            <p class="note">The <code>no_neede</code> value is spelled that way in the database itself &mdash; not a typo introduced here.</p>
+            <pre class="code">{
+  <span class="k">"radioSign"</span>: <span class="s">"Eagle-1"</span>,
+  <span class="k">"landingPadId"</span>: 1,
+  <span class="k">"requestStatus"</span>: <span class="s">"needed"</span>
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"aerialMission"</span>: {
+    <span class="k">"id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"created_at"</span>: <span class="s">"..."</span>,
+    <span class="k">"radio_sign"</span>: <span class="s">"Eagle-1"</span>,
+    <span class="k">"landing_pad_id"</span>: 1,
+    <span class="k">"request-status"</span>: <span class="s">"needed"</span>
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">request-status must be one of: no_neede, needed, in_progress, approved, denied</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="am-put">
+        <div class="bar">
+          <span class="badge put">PUT</span>
+          <span class="path">/aerial-mission/<span class="param">:id</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Partial update &mdash; send any one field alone, or several together.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body &mdash; any combination of</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody>
+                <tr><td class="field">radioSign</td><td>string</td></tr>
+                <tr><td class="field">landingPadId</td><td>number</td></tr>
+                <tr><td class="field">requestStatus</td><td>enum</td></tr>
+              </tbody>
+            </table>
+            <p class="note"><code>requestStatus</code> (DB enum, validated by the controller): no_neede &middot; needed &middot; in_progress &middot; approved &middot; denied</p>
+            <pre class="code">{ <span class="k">"requestStatus"</span>: <span class="s">"approved"</span> }</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"aerialMission"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Aerial mission not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="am-list">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/aerial-mission</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Every aerial mission, newest first.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request</p>
+            <p class="note" style="margin-top:0">No parameters.</p>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"aerialMissions"</span>: [ { <span class="c">...</span> }, { <span class="c">...</span> } ] }</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
     <section class="notes-section">
       <div class="head" style="border-bottom:2px solid var(--text); padding-bottom:.5rem; margin-bottom:.8rem;">
         <h2 style="font-size:1.15rem; text-transform:uppercase; letter-spacing:.03em; font-weight:800; margin:0;">Notes</h2>
       </div>
       <ul>
-        <li>Enum fields (<code class="inline">type</code>, <code class="inline">status</code>, <code class="inline">urgency</code>, <code class="inline">method</code>, <code class="inline">evac-ability</code>, <code class="inline">role</code>) are enforced by Postgres. An invalid value fails the insert/update and surfaces as a generic <code class="inline">500</code>, not a <code class="inline">400</code>, unless the controller validates it first (noted per field above where it does).</li>
+        <li>Enum fields (<code class="inline">type</code>, <code class="inline">status</code>, <code class="inline">urgency</code>, <code class="inline">method</code>, <code class="inline">evac-ability</code>, <code class="inline">role</code>, <code class="inline">request-status</code>) are enforced by Postgres. An invalid value fails the insert/update and surfaces as a generic <code class="inline">500</code>, not a <code class="inline">400</code>, unless the controller validates it first (noted per field above where it does).</li>
         <li>GeoJSON Points round-trip: send <code class="inline">{ "type": "Point", "coordinates": [lng, lat] }</code>, get the same shape back (longitude first, per GeoJSON &mdash; not lat/lng).</li>
         <li>Column names containing a hyphen (<code class="inline">"event-id"</code>, <code class="inline">"evac-ability"</code>, <code class="inline">"recommended-evac-dest"</code>, <code class="inline">"evac-ready"</code>, <code class="inline">"repiratory-rate"</code>) appear exactly that way in JSON responses.</li>
       </ul>
