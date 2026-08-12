@@ -19,7 +19,7 @@ async function create_event(eventData) {
 
 async function list_events() {
   const query =
-    "SELECT id, name, type, status, ST_AsGeoJSON(location)::json AS location, created_at, closure_at FROM events ORDER BY created_at DESC;";
+    "SELECT id, name, type, status, ST_AsGeoJSON(location)::json AS location, created_at, closure_at, \"aerial-evac\" FROM events ORDER BY created_at DESC;";
   try {
     const [result] = await sequelize.query(query);
     return result;
@@ -30,7 +30,7 @@ async function list_events() {
 
 async function get_event_by_id(id) {
   const query =
-    "SELECT id, name, type, status, ST_AsGeoJSON(location)::json AS location, created_at, closure_at FROM events WHERE id = :id;";
+    "SELECT id, name, type, status, ST_AsGeoJSON(location)::json AS location, created_at, closure_at, \"aerial-evac\" FROM events WHERE id = :id;";
   try {
     const [result] = await sequelize.query(query, {
       replacements: { id },
