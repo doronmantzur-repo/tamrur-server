@@ -128,6 +128,7 @@
   nav.toc a .m.get { color: var(--get); }
   nav.toc a .m.post { color: var(--post); }
   nav.toc a .m.put { color: var(--put); }
+  nav.toc a .m.delete { color: var(--danger); }
   nav.toc a .p { font-family: var(--mono); color: var(--text-dim); font-size: 0.8rem; }
 
   /* ---------- Main column ---------- */
@@ -190,6 +191,7 @@
   .badge.get  { color: var(--get);  background: var(--get-soft); }
   .badge.post { color: var(--post); background: var(--post-soft); }
   .badge.put  { color: var(--put);  background: var(--put-soft); }
+  .badge.delete { color: var(--danger); background: var(--danger-soft); }
   article.endpoint .path {
     font-family: var(--mono);
     font-size: 0.92rem;
@@ -374,6 +376,8 @@
       <ul>
         <li><a href="#events-post"><span class="m post">POST</span><span class="p">/events</span></a></li>
         <li><a href="#events-put"><span class="m put">PUT</span><span class="p">/events/:id</span></a></li>
+        <li><a href="#events-list"><span class="m get">GET</span><span class="p">/events</span></a></li>
+        <li><a href="#events-get"><span class="m get">GET</span><span class="p">/events/:id</span></a></li>
       </ul>
     </div>
     <div class="group">
@@ -398,6 +402,24 @@
         <li><a href="#ie-post"><span class="m post">POST</span><span class="p">/injuries-evac</span></a></li>
         <li><a href="#ie-put"><span class="m put">PUT</span><span class="p">/injuries-evac/:id</span></a></li>
         <li><a href="#ie-get"><span class="m get">GET</span><span class="p">/injuries-evac/:eventId</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <p class="group-label">Injuries Treatment</p>
+      <ul>
+        <li><a href="#it-post"><span class="m post">POST</span><span class="p">/injuries-treatment</span></a></li>
+        <li><a href="#it-put"><span class="m put">PUT</span><span class="p">/injuries-treatment/:eventId</span></a></li>
+        <li><a href="#it-delete"><span class="m delete">DELETE</span><span class="p">/injuries-treatment/:eventId</span></a></li>
+        <li><a href="#it-get"><span class="m get">GET</span><span class="p">/injuries-treatment/:eventId</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <p class="group-label">Vitals</p>
+      <ul>
+        <li><a href="#vitals-post"><span class="m post">POST</span><span class="p">/vitals</span></a></li>
+        <li><a href="#vitals-put"><span class="m put">PUT</span><span class="p">/vitals/:eventId</span></a></li>
+        <li><a href="#vitals-delete"><span class="m delete">DELETE</span><span class="p">/vitals/:eventId</span></a></li>
+        <li><a href="#vitals-get"><span class="m get">GET</span><span class="p">/vitals/:eventId</span></a></li>
       </ul>
     </div>
     <div class="group">
@@ -439,9 +461,10 @@
               <tbody>
                 <tr><td class="field">email</td><td>string</td><td class="req">required</td></tr>
                 <tr><td class="field">password</td><td>string</td><td class="req">required</td></tr>
-                <tr><td class="field">role</td><td>string</td><td class="opt">optional</td></tr>
+                <tr><td class="field">role</td><td>enum</td><td class="opt">optional</td></tr>
               </tbody>
             </table>
+            <p class="note"><code>role</code> (DB enum, not validated by the controller): brigade &middot; medic &middot; airforce</p>
             <pre class="code">{
   <span class="k">"email"</span>: <span class="s">"medic1@example.com"</span>,
   <span class="k">"password"</span>: <span class="s">"1234567"</span>,
@@ -499,7 +522,7 @@
         <h2>Events</h2>
         <span class="table-tag">public.events</span>
       </div>
-      <p class="desc">The incident record everything else hangs off of. No list/read route is exposed yet &mdash; only create and update.</p>
+      <p class="desc">The incident record everything else hangs off of.</p>
 
       <article class="endpoint" id="events-post">
         <div class="bar">
@@ -554,25 +577,73 @@
           <span class="path">/events/<span class="param">:id</span></span>
           <span class="auth-pill required">Bearer required</span>
         </div>
-        <p class="summary">Partial update &mdash; only fields you send are changed.</p>
+        <p class="summary">Partial update &mdash; only fields you send are changed. Send any one field alone, or several together.</p>
         <div class="panes">
           <div class="pane">
-            <p class="pane-label">Request body &mdash; one or both</p>
+            <p class="pane-label">Request body &mdash; any combination of</p>
             <table class="params">
               <thead><tr><th>Field</th><th>Type</th></tr></thead>
               <tbody>
                 <tr><td class="field">name</td><td>string</td></tr>
                 <tr><td class="field">status</td><td>enum</td></tr>
+                <tr><td class="field">closure_at</td><td>timestamp</td></tr>
+                <tr><td class="field">type</td><td>enum</td></tr>
+                <tr><td class="field">location</td><td>GeoJSON Point</td></tr>
               </tbody>
             </table>
             <p class="note"><code>status</code> (DB enum, not validated by the controller): evaluated &middot; controlled &middot; ready_for_evacuation &middot; evacuation_started &middot; completed</p>
-            <pre class="code">{ <span class="k">"status"</span>: <span class="s">"controlled"</span> }</pre>
+            <p class="note"><code>type</code>: explosive &middot; gunfire &middot; mortar &middot; anti-tank &middot; phosphorus</p>
+            <pre class="code">{ <span class="k">"closure_at"</span>: <span class="s">"2026-08-11T14:57:40.838Z"</span> }</pre>
           </div>
           <div class="pane">
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">200</span></div>
             <pre class="code">{ <span class="k">"event"</span>: { <span class="c">...full updated row</span> } }</pre>
-            <div class="status-row"><span class="status s4xx">400</span><span class="msg">name or status required</span></div>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">name, status, closure_at, type or location required</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Event not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="events-list">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/events</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Every event, newest first.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request</p>
+            <p class="note" style="margin-top:0">No parameters.</p>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"events"</span>: [ { <span class="c">...</span> }, { <span class="c">...</span> } ] }</pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="events-get">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/events/<span class="param">:id</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">One event by id.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">id</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"event"</span>: { <span class="c">...</span> } }</pre>
             <div class="status-row"><span class="status s4xx">404</span><span class="msg">Event not found</span></div>
           </div>
         </div>
@@ -921,6 +992,273 @@
       </article>
     </section>
 
+    <!-- ===================== INJURIES TREATMENT ===================== -->
+    <section class="resource" id="injuries-treatment">
+      <div class="head">
+        <h2>Injuries Treatment</h2>
+        <span class="table-tag">public."injuries-treatment"</span>
+      </div>
+      <p class="desc">Treatment notes for an event, one row per event (keyed by <code class="inline">"event-id"</code>, not by <code class="inline">id</code>). PUT/DELETE/GET all address the row by <code class="inline">:eventId</code>, unlike most other resources which use the row's own <code class="inline">id</code>.</p>
+
+      <article class="endpoint" id="it-post">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/injuries-treatment</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Creates one treatment record for an event.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">eventId</td><td>uuid</td><td class="req">required</td></tr>
+                <tr><td class="field">injuryId</td><td>uuid</td><td class="opt">optional</td></tr>
+                <tr><td class="field">treatment</td><td>string</td><td class="opt">optional</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{
+  <span class="k">"eventId"</span>: <span class="s">"&lt;event uuid&gt;"</span>,
+  <span class="k">"injuryId"</span>: <span class="s">"&lt;injury uuid&gt;"</span>,
+  <span class="k">"treatment"</span>: <span class="s">"Tourniquet applied to left thigh"</span>
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"injuryTreatment"</span>: {
+    <span class="k">"id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"event-id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"injury-id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"treatment"</span>: <span class="s">"..."</span>
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">eventId missing</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="it-put">
+        <div class="bar">
+          <span class="badge put">PUT</span>
+          <span class="path">/injuries-treatment/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Partial update, at least one field. Addressed by the event's id, not the treatment row's own id.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body &mdash; any of</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody>
+                <tr><td class="field">injuryId</td><td>uuid</td></tr>
+                <tr><td class="field">treatment</td><td>string</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{ <span class="k">"treatment"</span>: <span class="s">"Re-splinted, bleeding controlled"</span> }</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injuryTreatment"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Injury treatment record not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="it-delete">
+        <div class="bar">
+          <span class="badge delete">DELETE</span>
+          <span class="path">/injuries-treatment/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Deletes the treatment record for an event.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injuryTreatment"</span>: { <span class="c">...deleted row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Injury treatment record not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="it-get">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/injuries-treatment/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">The treatment record for one event, or <code class="inline">null</code> if none exists.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"injuryTreatment"</span>: { <span class="c">...</span> } }</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== VITALS ===================== -->
+    <section class="resource" id="vitals">
+      <div class="head">
+        <h2>Vitals</h2>
+        <span class="table-tag">public.vitals</span>
+      </div>
+      <p class="desc">Vital-sign readings, one row per event (keyed by <code class="inline">"event-id"</code>, not by <code class="inline">id</code>). Same addressing pattern as <a href="#injuries-treatment">Injuries Treatment</a>: PUT/DELETE/GET all take <code class="inline">:eventId</code>. Note the DB column is spelled <code class="inline">"repiratory-rate"</code> (missing an <em>s</em>) &mdash; the request/response key matches that spelling.</p>
+
+      <article class="endpoint" id="vitals-post">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/vitals</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Creates one vitals record for an event.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
+              <tbody>
+                <tr><td class="field">eventId</td><td>uuid</td><td class="req">required</td></tr>
+                <tr><td class="field">injuryId</td><td>uuid</td><td class="opt">optional</td></tr>
+                <tr><td class="field">pulse</td><td>number</td><td class="opt">optional</td></tr>
+                <tr><td class="field">bloodPressure</td><td>JSON object</td><td class="opt">optional</td></tr>
+                <tr><td class="field">spo2</td><td>number</td><td class="opt">optional</td></tr>
+                <tr><td class="field">respiratoryRate</td><td>number</td><td class="opt">optional</td></tr>
+                <tr><td class="field">oralTemperature</td><td>number</td><td class="opt">optional</td></tr>
+                <tr><td class="field">rectalTemperature</td><td>number</td><td class="opt">optional</td></tr>
+              </tbody>
+            </table>
+            <p class="note"><code>bloodPressure</code> is stored as raw JSON (<code>JSON.stringify</code>d as-is) &mdash; shape isn't validated or normalized server-side.</p>
+            <pre class="code">{
+  <span class="k">"eventId"</span>: <span class="s">"&lt;event uuid&gt;"</span>,
+  <span class="k">"pulse"</span>: 88,
+  <span class="k">"bloodPressure"</span>: { <span class="k">"systolic"</span>: 120, <span class="k">"diastolic"</span>: 80 },
+  <span class="k">"spo2"</span>: 97
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">201</span></div>
+            <pre class="code">{
+  <span class="k">"vitals"</span>: {
+    <span class="k">"id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"event-id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"injury-id"</span>: <span class="s">"uuid"</span>,
+    <span class="k">"pulse"</span>: 88,
+    <span class="k">"blood-pressure"</span>: { <span class="c">...</span> },
+    <span class="k">"spo2"</span>: 97,
+    <span class="k">"repiratory-rate"</span>: null,
+    <span class="k">"oral-temperature"</span>: null,
+    <span class="k">"rectal-temperature"</span>: null
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">eventId missing</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="vitals-put">
+        <div class="bar">
+          <span class="badge put">PUT</span>
+          <span class="path">/vitals/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Partial update, at least one field. Addressed by the event's id, not the vitals row's own id.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body &mdash; any of</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody>
+                <tr><td class="field">injuryId</td><td>uuid</td></tr>
+                <tr><td class="field">pulse</td><td>number</td></tr>
+                <tr><td class="field">bloodPressure</td><td>JSON object</td></tr>
+                <tr><td class="field">spo2</td><td>number</td></tr>
+                <tr><td class="field">respiratoryRate</td><td>number</td></tr>
+                <tr><td class="field">oralTemperature</td><td>number</td></tr>
+                <tr><td class="field">rectalTemperature</td><td>number</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{ <span class="k">"pulse"</span>: 92, <span class="k">"spo2"</span>: 95 }</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"vitals"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Vitals record not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="vitals-delete">
+        <div class="bar">
+          <span class="badge delete">DELETE</span>
+          <span class="path">/vitals/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Deletes the vitals record for an event.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"vitals"</span>: { <span class="c">...deleted row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Vitals record not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="vitals-get">
+        <div class="bar">
+          <span class="badge get">GET</span>
+          <span class="path">/vitals/<span class="param">:eventId</span></span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">The vitals record for one event, or <code class="inline">null</code> if none exists.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{ <span class="k">"vitals"</span>: { <span class="c">...</span> } }</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
     <!-- ===================== LANDING PADS ===================== -->
     <section class="resource" id="landing-pads">
       <div class="head">
@@ -965,7 +1303,7 @@
         <h2 style="font-size:1.15rem; text-transform:uppercase; letter-spacing:.03em; font-weight:800; margin:0;">Notes</h2>
       </div>
       <ul>
-        <li>Enum fields (<code class="inline">type</code>, <code class="inline">status</code>, <code class="inline">urgency</code>, <code class="inline">method</code>, <code class="inline">evac-ability</code>) are enforced by Postgres. An invalid value fails the insert/update and surfaces as a generic <code class="inline">500</code>, not a <code class="inline">400</code>, unless the controller validates it first (noted per field above where it does).</li>
+        <li>Enum fields (<code class="inline">type</code>, <code class="inline">status</code>, <code class="inline">urgency</code>, <code class="inline">method</code>, <code class="inline">evac-ability</code>, <code class="inline">role</code>) are enforced by Postgres. An invalid value fails the insert/update and surfaces as a generic <code class="inline">500</code>, not a <code class="inline">400</code>, unless the controller validates it first (noted per field above where it does).</li>
         <li>GeoJSON Points round-trip: send <code class="inline">{ "type": "Point", "coordinates": [lng, lat] }</code>, get the same shape back (longitude first, per GeoJSON &mdash; not lat/lng).</li>
         <li>Column names containing a hyphen (<code class="inline">"event-id"</code>, <code class="inline">"evac-ability"</code>, <code class="inline">"recommended-evac-dest"</code>, <code class="inline">"evac-ready"</code>, <code class="inline">"repiratory-rate"</code>) appear exactly that way in JSON responses.</li>
       </ul>
