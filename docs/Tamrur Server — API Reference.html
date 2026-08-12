@@ -433,7 +433,7 @@
       <ul>
         <li><a href="#am-post"><span class="m post">POST</span><span class="p">/aerial-mission</span></a></li>
         <li><a href="#am-put"><span class="m put">PUT</span><span class="p">/aerial-mission/:id</span></a></li>
-        <li><a href="#am-list"><span class="m get">GET</span><span class="p">/aerial-mission</span></a></li>
+        <li><a href="#am-list"><span class="m get">GET</span><span class="p">/aerial-mission/:eventId</span></a></li>
       </ul>
     </div>
   </nav>
@@ -1312,7 +1312,7 @@
         <h2>Aerial Mission</h2>
         <span class="table-tag">public.aerial_mission</span>
       </div>
-      <p class="desc">A helicopter/aerial evac request tied to a landing pad. Not scoped to an event &mdash; <code class="inline">GET</code> returns every mission, newest first.</p>
+      <p class="desc">A helicopter/aerial evac request tied to an event and (optionally) a landing pad.</p>
 
       <article class="endpoint" id="am-post">
         <div class="bar">
@@ -1320,13 +1320,14 @@
           <span class="path">/aerial-mission</span>
           <span class="auth-pill required">Bearer required</span>
         </div>
-        <p class="summary">All fields are optional &mdash; every column but <code class="inline">id</code>/<code class="inline">created_at</code> is nullable.</p>
+        <p class="summary"><code class="inline">eventId</code> is the only required field &mdash; every other column is nullable.</p>
         <div class="panes">
           <div class="pane">
             <p class="pane-label">Request body</p>
             <table class="params">
               <thead><tr><th>Field</th><th>Type</th><th>Required</th></tr></thead>
               <tbody>
+                <tr><td class="field">eventId</td><td>uuid</td><td class="req">required</td></tr>
                 <tr><td class="field">radioSign</td><td>string</td><td class="opt">optional</td></tr>
                 <tr><td class="field">landingPadId</td><td>number</td><td class="opt">optional</td></tr>
                 <tr><td class="field">requestStatus</td><td>enum</td><td class="opt">optional</td></tr>
@@ -1335,6 +1336,7 @@
             <p class="note"><code>requestStatus</code> (DB enum, validated by the controller): no_neede &middot; needed &middot; in_progress &middot; approved &middot; denied</p>
             <p class="note">The <code>no_neede</code> value is spelled that way in the database itself &mdash; not a typo introduced here.</p>
             <pre class="code">{
+  <span class="k">"eventId"</span>: <span class="s">"&lt;event uuid&gt;"</span>,
   <span class="k">"radioSign"</span>: <span class="s">"Eagle-1"</span>,
   <span class="k">"landingPadId"</span>: 1,
   <span class="k">"requestStatus"</span>: <span class="s">"needed"</span>
@@ -1347,11 +1349,13 @@
   <span class="k">"aerialMission"</span>: {
     <span class="k">"id"</span>: <span class="s">"uuid"</span>,
     <span class="k">"created_at"</span>: <span class="s">"..."</span>,
+    <span class="k">"event-id"</span>: <span class="s">"uuid"</span>,
     <span class="k">"radio_sign"</span>: <span class="s">"Eagle-1"</span>,
     <span class="k">"landing_pad_id"</span>: 1,
     <span class="k">"request-status"</span>: <span class="s">"needed"</span>
   }
 }</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">eventId missing</span></div>
             <div class="status-row"><span class="status s4xx">400</span><span class="msg">request-status must be one of: no_neede, needed, in_progress, approved, denied</span></div>
           </div>
         </div>
@@ -1391,14 +1395,17 @@
       <article class="endpoint" id="am-list">
         <div class="bar">
           <span class="badge get">GET</span>
-          <span class="path">/aerial-mission</span>
+          <span class="path">/aerial-mission/<span class="param">:eventId</span></span>
           <span class="auth-pill required">Bearer required</span>
         </div>
-        <p class="summary">Every aerial mission, newest first.</p>
+        <p class="summary">All aerial missions logged against one event, newest first.</p>
         <div class="panes">
           <div class="pane">
-            <p class="pane-label">Request</p>
-            <p class="note" style="margin-top:0">No parameters.</p>
+            <p class="pane-label">Path param</p>
+            <table class="params">
+              <thead><tr><th>Field</th><th>Type</th></tr></thead>
+              <tbody><tr><td class="field">eventId</td><td>uuid</td></tr></tbody>
+            </table>
           </div>
           <div class="pane">
             <p class="pane-label">Response</p>

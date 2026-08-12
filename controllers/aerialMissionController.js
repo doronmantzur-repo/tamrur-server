@@ -5,13 +5,22 @@ const REQUEST_STATUS_VALUES = ["no_neede", "needed", "in_progress", "approved", 
 async function create_aerial_mission(req, res, next) {
   try {
     console.log(req.body);
-    const { radioSign, landingPadId, requestStatus } = req.body;
+    const { eventId, radioSign, landingPadId, requestStatus } = req.body;
+
+    if (!eventId) {
+      throw { status: 400, message: "eventId missing" };
+    }
 
     if (requestStatus !== undefined && !REQUEST_STATUS_VALUES.includes(requestStatus)) {
       throw { status: 400, message: `request-status must be one of: ${REQUEST_STATUS_VALUES.join(", ")}` };
     }
 
-    const aerialMission = await aerialMissionModel.create_aerial_mission({ radioSign, landingPadId, requestStatus });
+    const aerialMission = await aerialMissionModel.create_aerial_mission({
+      eventId,
+      radioSign,
+      landingPadId,
+      requestStatus,
+    });
     res.status(201).json({ aerialMission });
   } catch (err) {
     next(err);
@@ -39,13 +48,14 @@ async function update_aerial_mission(req, res, next) {
   }
 }
 
-async function list_aerial_missions(req, res, next) {
+async function get_aerial_missions_by_event(req, res, next) {
   try {
-    const aerialMissions = await aerialMissionModel.list_aerial_missions();
+    const { eventId } = req.params;
+    const aerialMissions = await aerialMissionModel.get_aerial_missions_by_event(eventId);
     res.status(200).json({ aerialMissions });
   } catch (err) {
     next(err);
   }
 }
 
-module.exports = { create_aerial_mission, update_aerial_mission, list_aerial_missions };
+module.exports = { create_aerial_mission, update_aerial_mission, get_aerial_missions_by_event };

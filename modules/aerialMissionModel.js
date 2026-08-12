@@ -2,10 +2,11 @@ const { sequelize } = require("../db/models");
 
 async function create_aerial_mission(data) {
   const query =
-    'INSERT INTO aerial_mission (radio_sign, landing_pad_id, "request-status") VALUES (:radioSign, :landingPadId, :requestStatus) RETURNING *;';
+    'INSERT INTO aerial_mission ("event-id", radio_sign, landing_pad_id, "request-status") VALUES (:eventId, :radioSign, :landingPadId, :requestStatus) RETURNING *;';
   try {
     const [result] = await sequelize.query(query, {
       replacements: {
+        eventId: data.eventId,
         radioSign: data.radioSign ?? null,
         landingPadId: data.landingPadId ?? null,
         requestStatus: data.requestStatus ?? null,
@@ -40,14 +41,14 @@ async function update_aerial_mission(id, updates) {
   }
 }
 
-async function list_aerial_missions() {
-  const query = "SELECT * FROM aerial_mission ORDER BY created_at DESC;";
+async function get_aerial_missions_by_event(eventId) {
+  const query = 'SELECT * FROM aerial_mission WHERE "event-id" = :eventId ORDER BY created_at DESC;';
   try {
-    const [result] = await sequelize.query(query);
+    const [result] = await sequelize.query(query, { replacements: { eventId } });
     return result;
   } catch (error) {
     throw new Error("Error fetching aerial missions");
   }
 }
 
-module.exports = { create_aerial_mission, update_aerial_mission, list_aerial_missions };
+module.exports = { create_aerial_mission, update_aerial_mission, get_aerial_missions_by_event };
