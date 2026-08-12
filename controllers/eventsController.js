@@ -35,17 +35,23 @@ async function get_event_by_id(req, res, next) {
   }
 }
 
+const AERIAL_EVAC_VALUES = ["no_neede", "needed", "in_progress", "approved", "denied"];
+
 async function update_event(req, res, next) {
   try {
     console.log(req.body);
     const { id } = req.params;
-    const { name, status, closure_at, type, location } = req.body;
+    const { name, status, closure_at, type, location, aerialEvac } = req.body;
 
-    if (!name && !status && !closure_at && !type && !location) {
-      throw { status: 400, message: "name, status, closure_at, type or location required" };
+    if (!name && !status && !closure_at && !type && !location && !aerialEvac) {
+      throw { status: 400, message: "name, status, closure_at, type, location or aerialEvac required" };
     }
 
-    const event = await eventsModel.update_event(id, { name, status, closure_at, type, location });
+    if (aerialEvac !== undefined && !AERIAL_EVAC_VALUES.includes(aerialEvac)) {
+      throw { status: 400, message: `aerialEvac must be one of: ${AERIAL_EVAC_VALUES.join(", ")}` };
+    }
+
+    const event = await eventsModel.update_event(id, { name, status, closure_at, type, location, aerialEvac });
     res.status(200).json({ event });
   } catch (err) {
     next(err);

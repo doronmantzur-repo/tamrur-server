@@ -1,6 +1,6 @@
 const aerialMissionModel = require("../modules/aerialMissionModel.js");
 
-const REQUEST_STATUS_VALUES = ["no_neede", "needed", "in_progress", "approved", "denied"];
+const REQUEST_STATUS_VALUES = ["no_needed", "needed", "in_progress", "approved", "denied"];
 
 async function create_aerial_mission(req, res, next) {
   try {
