@@ -5,7 +5,7 @@ const port = 8080;
 const authRouter = require("./routes/authRoutes.js");
 const eventRouter = require("./routes/eventsRouts.js");
 const injuriesRouter = require("./routes/injuriesRoutes.js");
-const landingPadsRouter = require("./routes/landingPadsRoutes.js");
+const locationsRouter = require("./routes/locationsRoutes.js");
 const evacuationsRouter = require("./routes/evacuationsRoutes.js");
 const injuriesEvacRouter = require("./routes/injuriesEvacRoutes.js");
 const injuriesTreatmentRouter = require("./routes/injuriesTreatmentRoutes.js");
@@ -22,7 +22,7 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/events", eventRouter);
 app.use("/injuries", injuriesRouter);
-app.use("/landing-pads", landingPadsRouter);
+app.use("/locations", locationsRouter);
 app.use("/evacuations", evacuationsRouter);
 app.use("/injuries-evac", injuriesEvacRouter);
 app.use("/injuries-treatment", injuriesTreatmentRouter);
