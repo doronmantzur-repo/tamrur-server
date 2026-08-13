@@ -1,61 +1,164 @@
 const { sequelize } = require("../db/models");
 
+/**
+ * Logs the underlying Postgres error, then returns the caller-facing one.
+ *
+ * Without this the real cause (a missing column, a constraint violation) is
+ * discarded and the client just sees an opaque 500 with nothing written down
+ * anywhere. Errors that already carry a status pass through untouched.
+ */
+function dbError(error, message) {
+  if (error?.status) return error;
+
+  console.error(message, error);
+  return new Error(message);
+}
+
+/**
+ * The writable columns, keyed by the camelCase name the controller passes in.
+ *
+ * Statements are assembled from this map alone — never from caller-supplied
+ * strings — so an unknown key is dropped rather than reaching the SQL.
+ */
+const COLUMNS = {
+  urgency: '"urgency"',
+  evacPriority: '"evac-priority"',
+  escort: '"escort"',
+  destEvacRecommend: '"recommended-evac-dest"',
+  evacAbility: '"evac-ability"',
+  evacReady: '"evac-ready"',
+  description: '"description"',
+  casualtyNumber: '"casualty-number"',
+  treatments: '"treatments"',
+  treatmentPriority: '"treatment-priority"',
+  ventilation: '"ventilation"',
+  escortType: '"escort-type"',
+  helivac: '"helivac"',
+};
+
+/** Columns holding JSON, which need an explicit cast on the bind parameter. */
+const JSON_COLUMNS = new Set(["treatments"]);
+
+/**
+ * Turns the provided fields into `column = :param` fragments plus their binds.
+ *
+ * Only keys actually present are included. That's the point: a COALESCE-every-
+ * column update can never clear a value, so unchecking a treatment or clearing
+ * a note would silently keep the old one — and the medic table edits one cell
+ * at a time.
+ *
+ * @param {Object} fields - camelCase field name -> value. `undefined` is skipped, `null` clears.
+ * @returns {{assignments: Array<string>, replacements: Object}}
+ */
+function buildAssignments(fields) {
+  const assignments = [];
+  const replacements = {};
+
+  Object.entries(fields).forEach(([key, value]) => {
+    if (value === undefined) return;
+
+    const column = COLUMNS[key];
+    if (!column) return;
+
+    const isJson = JSON_COLUMNS.has(key);
+    assignments.push(`${column} = :${key}${isJson ? "::jsonb" : ""}`);
+    replacements[key] = isJson && value !== null ? JSON.stringify(value) : value;
+  });
+
+  return { assignments, replacements };
+}
+
+/**
+ * Inserts a casualty.
+ *
+ * Columns the caller left out keep their schema defaults (`treatments` an empty
+ * array, `helivac` false) rather than being forced to null.
+ */
 async function create_casualty(casualtyData) {
-  const query =
-    'INSERT INTO casualties ("event-id", urgency, "evac-priority", escort, "recommended-evac-dest", "evac-ability", "evac-ready") VALUES (:eventId, :urgency, :evacPriority, :escort, :destEvacRecommend, :evacAbility, :evacReady) RETURNING *;';
+  const { eventId, ...fields } = casualtyData;
+  const columns = ['"event-id"'];
+  const values = [":eventId"];
+  const replacements = { eventId };
+
+  // מס' פצוע is handed out automatically unless the medic typed one. A blank
+  // field arrives as an explicit null rather than an absent key, so both have
+  // to count as "not provided" — otherwise every casualty is created unnumbered.
+  const assignCasualtyNumber =
+    fields.casualtyNumber === undefined || fields.casualtyNumber === null;
+  if (assignCasualtyNumber) {
+    delete fields.casualtyNumber;
+  }
+
+  Object.entries(fields).forEach(([key, value]) => {
+    if (value === undefined) return;
+
+    const column = COLUMNS[key];
+    if (!column) return;
+
+    const isJson = JSON_COLUMNS.has(key);
+    columns.push(column);
+    values.push(`:${key}${isJson ? "::jsonb" : ""}`);
+    replacements[key] = isJson && value !== null ? JSON.stringify(value) : value;
+  });
+
+  // The next number for this event, counted in the same statement as the
+  // insert. Two simultaneous inserts can still pick the same number; the field
+  // is editable, and a duplicate is a lot less disruptive mid-incident than a
+  // failed insert would be.
+  if (assignCasualtyNumber) {
+    columns.push('"casualty-number"');
+    values.push(
+      '(SELECT COALESCE(MAX("casualty-number"), 0) + 1 FROM casualties WHERE "event-id" = :eventId)',
+    );
+  }
+
+  const query = `INSERT INTO casualties (${columns.join(", ")}) VALUES (${values.join(", ")}) RETURNING *;`;
+
   try {
-    const [result] = await sequelize.query(query, {
-      replacements: {
-        eventId: casualtyData.eventId,
-        urgency: casualtyData.urgency ?? null,
-        evacPriority: casualtyData.evacPriority ?? null,
-        escort: casualtyData.escort ?? null,
-        destEvacRecommend: casualtyData.destEvacRecommend ?? null,
-        evacAbility: casualtyData.evacAbility ?? null,
-        evacReady: casualtyData.evacReady ?? null,
-      },
-    });
+    const [result] = await sequelize.query(query, { replacements });
     return result[0];
   } catch (error) {
-    throw new Error("Error creating casualty record");
+    throw dbError(error, "Error creating casualty record");
   }
 }
 
+/**
+ * Updates a casualty, writing only the fields the caller actually sent.
+ */
 async function update_casualty(id, updates) {
-  const query =
-    'UPDATE casualties SET urgency = COALESCE(:urgency, urgency), "evac-priority" = COALESCE(:evacPriority, "evac-priority"), escort = COALESCE(:escort, escort), "recommended-evac-dest" = COALESCE(:destEvacRecommend, "recommended-evac-dest"), "evac-ability" = COALESCE(:evacAbility, "evac-ability"), "evac-ready" = COALESCE(:evacReady, "evac-ready") WHERE id = :id RETURNING *;';
+  const { assignments, replacements } = buildAssignments(updates);
+
+  if (assignments.length === 0) {
+    throw { status: 400, message: "at least one field must be provided" };
+  }
+
+  const query = `UPDATE casualties SET ${assignments.join(", ")} WHERE id = :id RETURNING *;`;
+
   try {
-    const [result] = await sequelize.query(query, {
-      replacements: {
-        id,
-        urgency: updates.urgency ?? null,
-        evacPriority: updates.evacPriority ?? null,
-        escort: updates.escort ?? null,
-        destEvacRecommend: updates.destEvacRecommend ?? null,
-        evacAbility: updates.evacAbility ?? null,
-        evacReady: updates.evacReady ?? null,
-      },
-    });
+    const [result] = await sequelize.query(query, { replacements: { ...replacements, id } });
     const casualty = result[0];
     if (!casualty) {
       throw { status: 404, message: "Casualty not found" };
     }
     return casualty;
   } catch (error) {
-    if (error.status) throw error;
-    throw new Error("Error updating casualty");
+    throw dbError(error, "Error updating casualty");
   }
 }
 
+/**
+ * An event's casualties, in the order the paper form lists them.
+ */
 async function get_casualties_by_event(eventId) {
-  const query = 'SELECT * FROM casualties WHERE "event-id" = :eventId;';
+  const query =
+    'SELECT * FROM casualties WHERE "event-id" = :eventId ORDER BY "casualty-number" ASC NULLS LAST, created_at ASC;';
   try {
     const [result] = await sequelize.query(query, {
       replacements: { eventId },
     });
     return result;
   } catch (error) {
-    throw new Error("Error fetching casualties");
+    throw dbError(error, "Error fetching casualties");
   }
 }
 
