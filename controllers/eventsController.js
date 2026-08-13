@@ -35,7 +35,20 @@ async function get_event_by_id(req, res, next) {
   }
 }
 
-const AERIAL_EVAC_VALUES = ["no_neede", "needed", "in_progress", "approved", "denied"];
+const AERIAL_EVAC_VALUES = [
+  "no_needed",
+  "needed",
+  "in_progress",
+  "approved",
+  "denied",
+];
+const STATUS_VALUES = [
+  "evaluated",
+  "controlled",
+  "ready_for_evacuation",
+  "evacuation_started",
+  "completed",
+];
 
 async function update_event(req, res, next) {
   try {
@@ -44,14 +57,35 @@ async function update_event(req, res, next) {
     const { name, status, closure_at, type, location, aerialEvac } = req.body;
 
     if (!name && !status && !closure_at && !type && !location && !aerialEvac) {
-      throw { status: 400, message: "name, status, closure_at, type, location or aerialEvac required" };
+      throw {
+        status: 400,
+        message:
+          "name, status, closure_at, type, location or aerialEvac required",
+      };
+    }
+
+    if (status !== undefined && !STATUS_VALUES.includes(status)) {
+      throw {
+        status: 400,
+        message: `status must be one of: ${STATUS_VALUES.join(", ")}`,
+      };
     }
 
     if (aerialEvac !== undefined && !AERIAL_EVAC_VALUES.includes(aerialEvac)) {
-      throw { status: 400, message: `aerialEvac must be one of: ${AERIAL_EVAC_VALUES.join(", ")}` };
+      throw {
+        status: 400,
+        message: `aerialEvac must be one of: ${AERIAL_EVAC_VALUES.join(", ")}`,
+      };
     }
 
-    const event = await eventsModel.update_event(id, { name, status, closure_at, type, location, aerialEvac });
+    const event = await eventsModel.update_event(id, {
+      name,
+      status,
+      closure_at,
+      type,
+      location,
+      aerialEvac,
+    });
     res.status(200).json({ event });
   } catch (err) {
     next(err);
