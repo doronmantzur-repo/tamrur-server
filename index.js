@@ -11,6 +11,7 @@ const injuriesEvacRouter = require("./routes/injuriesEvacRoutes.js");
 const injuriesTreatmentRouter = require("./routes/injuriesTreatmentRoutes.js");
 const vitalsRouter = require("./routes/vitalsRoutes.js");
 const aerialMissionRouter = require("./routes/aerialMissionRoutes.js");
+const medicQueryRouter = require("./routes/medicQueryRoutes.js");
 
 app.use(express.json());
 app.use(
@@ -28,6 +29,7 @@ app.use("/injuries-evac", injuriesEvacRouter);
 app.use("/injuries-treatment", injuriesTreatmentRouter);
 app.use("/vitals", vitalsRouter);
 app.use("/aerial-mission", aerialMissionRouter);
+app.use("/medic-query", medicQueryRouter);
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
