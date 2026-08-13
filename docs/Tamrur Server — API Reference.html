@@ -423,9 +423,9 @@
       </ul>
     </div>
     <div class="group">
-      <p class="group-label">Landing Pads</p>
+      <p class="group-label">Locations</p>
       <ul>
-        <li><a href="#pads-get"><span class="m get">GET</span><span class="p">/landing-pads</span></a></li>
+        <li><a href="#pads-get"><span class="m get">GET</span><span class="p">/locations</span></a></li>
       </ul>
     </div>
     <div class="group">
@@ -1267,21 +1267,21 @@
       </article>
     </section>
 
-    <!-- ===================== LANDING PADS ===================== -->
-    <section class="resource" id="landing-pads">
+    <!-- ===================== LOCATIONS ===================== -->
+    <section class="resource" id="locations">
       <div class="head">
-        <h2>Landing Pads</h2>
-        <span class="table-tag">public.landing_pads</span>
+        <h2>Locations</h2>
+        <span class="table-tag">public.locations</span>
       </div>
       <p class="desc">Read-only reference list. No POST/PUT route exists for this table yet.</p>
 
       <article class="endpoint" id="pads-get">
         <div class="bar">
           <span class="badge get">GET</span>
-          <span class="path">/landing-pads</span>
+          <span class="path">/locations</span>
           <span class="auth-pill required">Bearer required</span>
         </div>
-        <p class="summary">Returns every landing pad row as-is.</p>
+        <p class="summary">Returns every location row as-is.</p>
         <div class="panes">
           <div class="pane">
             <p class="pane-label">Request</p>
@@ -1291,10 +1291,11 @@
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">200</span></div>
             <pre class="code">{
-  <span class="k">"landingPads"</span>: [
+  <span class="k">"locations"</span>: [
     {
       <span class="k">"id"</span>: <span class="s">"1"</span>,
       <span class="k">"name"</span>: <span class="s">"LP_001"</span>,
+      <span class="k">"type"</span>: <span class="s">"..."</span>,
       <span class="k">"is_ok"</span>: true,
       <span class="k">"status_update"</span>: <span class="s">"..."</span>,
       <span class="k">"location"</span>: { <span class="c">GeoJSON Point</span> }

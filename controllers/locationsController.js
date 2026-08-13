@@ -1,12 +1,12 @@
-const landingPadsModel = require("../modules/landingPadsModel.js");
+const locationsModel = require("../modules/locationsModel.js");
 
-async function get_landing_pads(req, res, next) {
+async function get_locations(req, res, next) {
   try {
-    const landingPads = await landingPadsModel.get_landing_pads();
-    res.status(200).json({ landingPads });
+    const locations = await locationsModel.get_locations();
+    res.status(200).json({ locations });
   } catch (err) {
     next(err);
   }
 }
 
-module.exports = { get_landing_pads };
+module.exports = { get_locations };
