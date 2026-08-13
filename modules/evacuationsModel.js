@@ -61,4 +61,24 @@ async function get_evacuations_by_event(eventId) {
   }
 }
 
-module.exports = { create_evacuation, update_evacuation, get_evacuations_by_event };
+async function delete_evacuation(id) {
+  const query = "DELETE FROM evacuations WHERE id = :id RETURNING *;";
+  try {
+    const [result] = await sequelize.query(query, { replacements: { id } });
+    const evacuation = result[0];
+    if (!evacuation) {
+      throw { status: 404, message: "Evacuation not found" };
+    }
+    return evacuation;
+  } catch (error) {
+    if (error.status) throw error;
+    throw new Error("Error deleting evacuation");
+  }
+}
+
+module.exports = {
+  create_evacuation,
+  update_evacuation,
+  get_evacuations_by_event,
+  delete_evacuation,
+};

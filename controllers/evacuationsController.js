@@ -106,4 +106,19 @@ async function get_evacuations_by_event(req, res, next) {
   }
 }
 
-module.exports = { create_evacuation, update_evacuation, get_evacuations_by_event };
+async function delete_evacuation(req, res, next) {
+  try {
+    const { id } = req.params;
+    const evacuation = await evacuationsModel.delete_evacuation(id);
+    res.status(200).json({ evacuation });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = {
+  create_evacuation,
+  update_evacuation,
+  get_evacuations_by_event,
+  delete_evacuation,
+};
