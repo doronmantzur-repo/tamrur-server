@@ -436,6 +436,12 @@
         <li><a href="#am-list"><span class="m get">GET</span><span class="p">/aerial-mission/:eventId</span></a></li>
       </ul>
     </div>
+    <div class="group">
+      <p class="group-label">Medic Query</p>
+      <ul>
+        <li><a href="#medic-query-ask"><span class="m post">POST</span><span class="p">/medic-query/ask</span></a></li>
+      </ul>
+    </div>
   </nav>
 
   <main>
@@ -1301,6 +1307,46 @@
       <span class="k">"location"</span>: { <span class="c">GeoJSON Point</span> }
     }
   ]
+}</pre>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== MEDIC QUERY ===================== -->
+    <section class="resource" id="medic-query">
+      <div class="head">
+        <h2>Medic Query</h2>
+      </div>
+      <p class="desc">Retrieval-augmented Q&amp;A over a reference medical PDF. Embeds the question, retrieves the closest excerpts from an in-memory embedding index (loaded once at server startup from a local file), and asks Claude to answer using only that context.</p>
+
+      <article class="endpoint" id="medic-query-ask">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/medic-query/ask</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">Answers a free-text question against the reference PDF.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request</p>
+            <table class="fields">
+              <thead>
+                <tr><th>Field</th><th>Type</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="field">question</td><td>string</td><td class="req">required</td></tr>
+              </tbody>
+            </table>
+            <pre class="code">{
+  <span class="k">"question"</span>: <span class="s">"מהם התסמינים של התייבשות?"</span>
+}</pre>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{
+  <span class="k">"answer"</span>: <span class="s">"..."</span>
 }</pre>
           </div>
         </div>
