@@ -1,9 +1,9 @@
-const injuriesModel = require("../modules/injuriesModel.js");
+const casualtiesModel = require("../modules/casualtiesModel.js");
 
 const URGENCY_VALUES = ["non-urgent", "urgent", "expectant", "deceased"];
 const EVAC_ABILITY_VALUES = ["walk", "sit", "lie"];
 
-function validateInjuryFields({ urgency, evacPriority, escort, evacAbility, evacReady }) {
+function validateCasualtyFields({ urgency, evacPriority, escort, evacAbility, evacReady }) {
   if (urgency !== undefined && !URGENCY_VALUES.includes(urgency)) {
     throw { status: 400, message: `urgency must be one of: ${URGENCY_VALUES.join(", ")}` };
   }
@@ -25,7 +25,7 @@ function validateInjuryFields({ urgency, evacPriority, escort, evacAbility, evac
   }
 }
 
-async function create_injury(req, res, next) {
+async function create_casualty(req, res, next) {
   try {
     console.log(req.body);
     const {
@@ -42,9 +42,9 @@ async function create_injury(req, res, next) {
       throw { status: 400, message: "eventId missing" };
     }
 
-    validateInjuryFields({ urgency, evacPriority, escort, evacAbility, evacReady });
+    validateCasualtyFields({ urgency, evacPriority, escort, evacAbility, evacReady });
 
-    const injury = await injuriesModel.create_injury({
+    const casualty = await casualtiesModel.create_casualty({
       eventId,
       urgency,
       evacPriority,
@@ -53,13 +53,13 @@ async function create_injury(req, res, next) {
       evacAbility,
       evacReady,
     });
-    res.status(201).json({ injury });
+    res.status(201).json({ casualty });
   } catch (err) {
     next(err);
   }
 }
 
-async function update_injury(req, res, next) {
+async function update_casualty(req, res, next) {
   try {
     console.log(req.body);
     const { id } = req.params;
@@ -83,9 +83,9 @@ async function update_injury(req, res, next) {
       throw { status: 400, message: "at least one field must be provided" };
     }
 
-    validateInjuryFields({ urgency, evacPriority, escort, evacAbility, evacReady });
+    validateCasualtyFields({ urgency, evacPriority, escort, evacAbility, evacReady });
 
-    const injury = await injuriesModel.update_injury(id, {
+    const casualty = await casualtiesModel.update_casualty(id, {
       urgency,
       evacPriority,
       escort,
@@ -93,20 +93,20 @@ async function update_injury(req, res, next) {
       evacAbility,
       evacReady,
     });
-    res.status(200).json({ injury });
+    res.status(200).json({ casualty });
   } catch (err) {
     next(err);
   }
 }
 
-async function get_injuries_by_event(req, res, next) {
+async function get_casualties_by_event(req, res, next) {
   try {
     const { eventId } = req.params;
-    const injuries = await injuriesModel.get_injuries_by_event(eventId);
-    res.status(200).json({ injuries });
+    const casualties = await casualtiesModel.get_casualties_by_event(eventId);
+    res.status(200).json({ casualties });
   } catch (err) {
     next(err);
   }
 }
 
-module.exports = { create_injury, update_injury, get_injuries_by_event };
+module.exports = { create_casualty, update_casualty, get_casualties_by_event };

@@ -4,7 +4,7 @@ const app = express();
 const port = 8080;
 const authRouter = require("./routes/authRoutes.js");
 const eventRouter = require("./routes/eventsRouts.js");
-const injuriesRouter = require("./routes/injuriesRoutes.js");
+const casualtiesRouter = require("./routes/casualtiesRoutes.js");
 const locationsRouter = require("./routes/locationsRoutes.js");
 const evacuationsRouter = require("./routes/evacuationsRoutes.js");
 const injuriesEvacRouter = require("./routes/injuriesEvacRoutes.js");
@@ -23,7 +23,7 @@ app.use(
 );
 app.use("/auth", authRouter);
 app.use("/events", eventRouter);
-app.use("/injuries", injuriesRouter);
+app.use("/casualties", casualtiesRouter);
 app.use("/locations", locationsRouter);
 app.use("/evacuations", evacuationsRouter);
 app.use("/injuries-evac", injuriesEvacRouter);

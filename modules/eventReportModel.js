@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const eventsModel = require("./eventsModel.js");
-const injuriesModel = require("./injuriesModel.js");
+const casualtiesModel = require("./casualtiesModel.js");
 const injuriesTreatmentModel = require("./injuriesTreatmentModel.js");
 const vitalsModel = require("./vitalsModel.js");
 const evacuationsModel = require("./evacuationsModel.js");
@@ -62,15 +62,15 @@ async function getEventReportData(eventId) {
   // Throws a 404 if the event doesn't exist.
   const event = await eventsModel.get_event_by_id(eventId);
 
-  const [injuries, treatments, vitalsRecords, evacuations, aerialMissions] = await Promise.all([
-    injuriesModel.get_injuries_by_event(eventId),
+  const [casualties, treatments, vitalsRecords, evacuations, aerialMissions] = await Promise.all([
+    casualtiesModel.get_casualties_by_event(eventId),
     injuriesTreatmentModel.get_injury_treatments_by_event(eventId),
     vitalsModel.get_vitals_records_by_event(eventId),
     evacuationsModel.get_evacuations_by_event(eventId),
     aerialMissionModel.get_aerial_missions_by_event(eventId),
   ]);
 
-  const data = { event, injuries, treatments, vitalsRecords, evacuations, aerialMissions };
+  const data = { event, casualties, treatments, vitalsRecords, evacuations, aerialMissions };
   await setCached(eventId, data);
   return data;
 }
