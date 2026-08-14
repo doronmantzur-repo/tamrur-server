@@ -1,5 +1,5 @@
 const Anthropic = require("@anthropic-ai/sdk");
-const injuriesModel = require("./injuriesModel.js");
+const casualtiesModel = require("./casualtiesModel.js");
 const injuriesTreatmentModel = require("./injuriesTreatmentModel.js");
 const medicQueryModel = require("./medicQueryModel.js");
 
@@ -14,10 +14,10 @@ const PRIORITY_TOOL = {
         items: {
           type: "object",
           properties: {
-            injuryId: { type: "string" },
+            casualtyId: { type: "string" },
             priority: { type: "integer", minimum: 1 },
           },
-          required: ["injuryId", "priority"],
+          required: ["casualtyId", "priority"],
         },
       },
     },
@@ -28,7 +28,7 @@ const PRIORITY_TOOL = {
 const SYSTEM_PROMPT =
   "You are a combat medic triage assistant. You are given: (1) reference excerpts, in Hebrew, from " +
   "the unit's official trauma/combat-casualty-care manual describing triage and evacuation-priority " +
-  "principles, and (2) a JSON list of an event's casualties (injuries) and the treatments logged for " +
+  "principles, and (2) a JSON list of an event's casualties and the treatments logged for " +
   "each. Base your evacuation-priority ranking primarily on the triage principles in the reference " +
   "excerpts, applied to each casualty's urgency, evac-ability, evac-ready status, and treatment " +
   "history — weigh both the casualty's own `treatments` field (a checklist of {done, text} items " +
@@ -46,8 +46,8 @@ const TRIAGE_EXCERPT_COUNT = 8;
  * broadened with whatever urgency levels are actually present in this
  * event's casualties so retrieval leans toward the most relevant sections.
  */
-function buildTriageQuery(injuries) {
-  const urgencies = [...new Set(injuries.map((injury) => injury.urgency).filter(Boolean))];
+function buildTriageQuery(casualties) {
+  const urgencies = [...new Set(casualties.map((casualty) => casualty.urgency).filter(Boolean))];
   const base = "עקרונות מיון פצועים וקביעת סדר עדיפויות לפינוי לפי חומרה ודחיפות";
   return urgencies.length > 0 ? `${base} (${urgencies.join(", ")})` : base;
 }
@@ -74,9 +74,9 @@ function extractPriorities(input) {
 /**
  * Asks Claude to rank an event's casualties by evacuation priority (based on
  * their injuries + logged treatments) and writes the resulting priority onto
- * each injury row. Only injuries that actually belong to this event are ever
- * updated — any hallucinated/foreign injuryId in the model's response is
- * dropped rather than trusted.
+ * each casualty row. Only casualties that actually belong to this event are
+ * ever updated — any hallucinated/foreign casualtyId in the model's response
+ * is dropped rather than trusted.
  */
 async function setEvacPriorities(eventId) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -84,21 +84,21 @@ async function setEvacPriorities(eventId) {
     throw new Error("Missing ANTHROPIC_API_KEY environment variable");
   }
 
-  const [injuries, treatments] = await Promise.all([
-    injuriesModel.get_injuries_by_event(eventId),
+  const [casualties, treatments] = await Promise.all([
+    casualtiesModel.get_casualties_by_event(eventId),
     injuriesTreatmentModel.get_injury_treatments_by_event(eventId),
   ]);
 
-  if (injuries.length === 0) {
+  if (casualties.length === 0) {
     return [];
   }
 
-  // Named treatmentLog, not treatments — injuries already has its own native
-  // `treatments` checklist column, and reusing that key would silently
-  // overwrite it with just this table's rows.
-  const injuriesWithTreatments = injuries.map((injury) => ({
-    ...injury,
-    treatmentLog: treatments.filter((treatment) => treatment["injury-id"] === injury.id),
+  // Named treatmentLog, not treatments — casualties already has its own
+  // native `treatments` checklist column, and reusing that key would
+  // silently overwrite it with just this table's rows.
+  const casualtiesWithTreatments = casualties.map((casualty) => ({
+    ...casualty,
+    treatmentLog: treatments.filter((treatment) => treatment["injury-id"] === casualty.id),
   }));
 
   // Grounds the ranking in the actual trauma manual rather than the model's
@@ -106,7 +106,7 @@ async function setEvacPriorities(eventId) {
   // medic-query PDF Q&A feature, reusing its cached embedder/index.
   const [embeddedChunks, queryEmbedding] = await Promise.all([
     medicQueryModel.embeddedChunksPromise,
-    medicQueryModel.embedQuery(buildTriageQuery(injuries)),
+    medicQueryModel.embedQuery(buildTriageQuery(casualties)),
   ]);
   const referenceExcerpts = medicQueryModel
     .retrieveTopK(embeddedChunks, queryEmbedding, TRIAGE_EXCERPT_COUNT)
@@ -123,7 +123,7 @@ async function setEvacPriorities(eventId) {
     messages: [
       {
         role: "user",
-        content: `Reference excerpts from the trauma manual:\n${referenceExcerpts}\n\nCasualties:\n${JSON.stringify(injuriesWithTreatments, null, 2)}`,
+        content: `Reference excerpts from the trauma manual:\n${referenceExcerpts}\n\nCasualties:\n${JSON.stringify(casualtiesWithTreatments, null, 2)}`,
       },
     ],
   });
@@ -133,12 +133,14 @@ async function setEvacPriorities(eventId) {
     throw new Error("AI did not return a priority assignment");
   }
 
-  const validInjuryIds = new Set(injuries.map((injury) => injury.id));
-  const validPriorities = extractPriorities(toolUse.input).filter(({ injuryId }) => validInjuryIds.has(injuryId));
+  const validCasualtyIds = new Set(casualties.map((casualty) => casualty.id));
+  const validPriorities = extractPriorities(toolUse.input).filter(({ casualtyId }) =>
+    validCasualtyIds.has(casualtyId),
+  );
 
   return Promise.all(
-    validPriorities.map(({ injuryId, priority }) =>
-      injuriesModel.update_injury(injuryId, { evacPriority: priority }),
+    validPriorities.map(({ casualtyId, priority }) =>
+      casualtiesModel.update_casualty(casualtyId, { evacPriority: priority }),
     ),
   );
 }
