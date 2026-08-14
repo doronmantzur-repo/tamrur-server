@@ -81,4 +81,7 @@ async function askQuestion(question, k = 8) {
   return response.content.find((block) => block.type === "text").text;
 }
 
-module.exports = { askQuestion };
+// Exported so other features (e.g. evacPriorityModel) can retrieve context
+// from the same trauma-book embeddings without loading a second copy of the
+// ONNX embedding model into memory.
+module.exports = { askQuestion, embedQuery, retrieveTopK, embeddedChunksPromise };
