@@ -1,6 +1,6 @@
 const Anthropic = require("@anthropic-ai/sdk");
 const casualtiesModel = require("./casualtiesModel.js");
-const injuriesTreatmentModel = require("./injuriesTreatmentModel.js");
+const casualtiesTreatmentModel = require("./casualtiesTreatmentModel.js");
 const medicQueryModel = require("./medicQueryModel.js");
 
 const PRIORITY_TOOL = {
@@ -86,7 +86,7 @@ async function setEvacPriorities(eventId) {
 
   const [casualties, treatments] = await Promise.all([
     casualtiesModel.get_casualties_by_event(eventId),
-    injuriesTreatmentModel.get_injury_treatments_by_event(eventId),
+    casualtiesTreatmentModel.get_casualty_treatments_by_event(eventId),
   ]);
 
   if (casualties.length === 0) {

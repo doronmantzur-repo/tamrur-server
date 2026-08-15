@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const eventsModel = require("./eventsModel.js");
 const casualtiesModel = require("./casualtiesModel.js");
-const injuriesTreatmentModel = require("./injuriesTreatmentModel.js");
+const casualtiesTreatmentModel = require("./casualtiesTreatmentModel.js");
 const vitalsModel = require("./vitalsModel.js");
 const evacuationsModel = require("./evacuationsModel.js");
 const aerialMissionModel = require("./aerialMissionModel.js");
@@ -64,7 +64,7 @@ async function getEventReportData(eventId) {
 
   const [casualties, treatments, vitalsRecords, evacuations, aerialMissions] = await Promise.all([
     casualtiesModel.get_casualties_by_event(eventId),
-    injuriesTreatmentModel.get_injury_treatments_by_event(eventId),
+    casualtiesTreatmentModel.get_casualty_treatments_by_event(eventId),
     vitalsModel.get_vitals_records_by_event(eventId),
     evacuationsModel.get_evacuations_by_event(eventId),
     aerialMissionModel.get_aerial_missions_by_event(eventId),

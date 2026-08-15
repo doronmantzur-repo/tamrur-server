@@ -405,12 +405,12 @@
       </ul>
     </div>
     <div class="group">
-      <p class="group-label">Injuries Treatment</p>
+      <p class="group-label">Casualties Treatment</p>
       <ul>
-        <li><a href="#it-post"><span class="m post">POST</span><span class="p">/injuries-treatment</span></a></li>
-        <li><a href="#it-put"><span class="m put">PUT</span><span class="p">/injuries-treatment/:eventId</span></a></li>
-        <li><a href="#it-delete"><span class="m delete">DELETE</span><span class="p">/injuries-treatment/:eventId</span></a></li>
-        <li><a href="#it-get"><span class="m get">GET</span><span class="p">/injuries-treatment/:eventId</span></a></li>
+        <li><a href="#ct-post"><span class="m post">POST</span><span class="p">/casualties-treatment</span></a></li>
+        <li><a href="#ct-put"><span class="m put">PUT</span><span class="p">/casualties-treatment/:eventId</span></a></li>
+        <li><a href="#ct-delete"><span class="m delete">DELETE</span><span class="p">/casualties-treatment/:eventId</span></a></li>
+        <li><a href="#ct-get"><span class="m get">GET</span><span class="p">/casualties-treatment/:eventId</span></a></li>
       </ul>
     </div>
     <div class="group">
@@ -1006,18 +1006,18 @@
       </article>
     </section>
 
-    <!-- ===================== INJURIES TREATMENT ===================== -->
-    <section class="resource" id="injuries-treatment">
+    <!-- ===================== CASUALTIES TREATMENT ===================== -->
+    <section class="resource" id="casualties-treatment">
       <div class="head">
-        <h2>Injuries Treatment</h2>
-        <span class="table-tag">public."injuries-treatment"</span>
+        <h2>Casualties Treatment</h2>
+        <span class="table-tag">public."casualties-treatment"</span>
       </div>
       <p class="desc">Treatment notes for an event, one row per event (keyed by <code class="inline">"event-id"</code>, not by <code class="inline">id</code>). PUT/DELETE/GET all address the row by <code class="inline">:eventId</code>, unlike most other resources which use the row's own <code class="inline">id</code>.</p>
 
-      <article class="endpoint" id="it-post">
+      <article class="endpoint" id="ct-post">
         <div class="bar">
           <span class="badge post">POST</span>
-          <span class="path">/injuries-treatment</span>
+          <span class="path">/casualties-treatment</span>
           <span class="auth-pill required">Bearer required</span>
         </div>
         <p class="summary">Creates one treatment record for an event.</p>
@@ -1042,7 +1042,7 @@
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">201</span></div>
             <pre class="code">{
-  <span class="k">"injuryTreatment"</span>: {
+  <span class="k">"casualtyTreatment"</span>: {
     <span class="k">"id"</span>: <span class="s">"uuid"</span>,
     <span class="k">"event-id"</span>: <span class="s">"uuid"</span>,
     <span class="k">"injury-id"</span>: <span class="s">"uuid"</span>,
@@ -1054,10 +1054,10 @@
         </div>
       </article>
 
-      <article class="endpoint" id="it-put">
+      <article class="endpoint" id="ct-put">
         <div class="bar">
           <span class="badge put">PUT</span>
-          <span class="path">/injuries-treatment/<span class="param">:eventId</span></span>
+          <span class="path">/casualties-treatment/<span class="param">:eventId</span></span>
           <span class="auth-pill required">Bearer required</span>
         </div>
         <p class="summary">Partial update, at least one field. Addressed by the event's id, not the treatment row's own id.</p>
@@ -1076,17 +1076,17 @@
           <div class="pane">
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">200</span></div>
-            <pre class="code">{ <span class="k">"injuryTreatment"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <pre class="code">{ <span class="k">"casualtyTreatment"</span>: { <span class="c">...full updated row</span> } }</pre>
             <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
-            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Injury treatment record not found</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Casualty treatment record not found</span></div>
           </div>
         </div>
       </article>
 
-      <article class="endpoint" id="it-delete">
+      <article class="endpoint" id="ct-delete">
         <div class="bar">
           <span class="badge delete">DELETE</span>
-          <span class="path">/injuries-treatment/<span class="param">:eventId</span></span>
+          <span class="path">/casualties-treatment/<span class="param">:eventId</span></span>
           <span class="auth-pill required">Bearer required</span>
         </div>
         <p class="summary">Deletes the treatment record for an event.</p>
@@ -1101,16 +1101,16 @@
           <div class="pane">
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">200</span></div>
-            <pre class="code">{ <span class="k">"injuryTreatment"</span>: { <span class="c">...deleted row</span> } }</pre>
-            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Injury treatment record not found</span></div>
+            <pre class="code">{ <span class="k">"casualtyTreatment"</span>: { <span class="c">...deleted row</span> } }</pre>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Casualty treatment record not found</span></div>
           </div>
         </div>
       </article>
 
-      <article class="endpoint" id="it-get">
+      <article class="endpoint" id="ct-get">
         <div class="bar">
           <span class="badge get">GET</span>
-          <span class="path">/injuries-treatment/<span class="param">:eventId</span></span>
+          <span class="path">/casualties-treatment/<span class="param">:eventId</span></span>
           <span class="auth-pill required">Bearer required</span>
         </div>
         <p class="summary">The treatment record for one event, or <code class="inline">null</code> if none exists.</p>
@@ -1125,7 +1125,7 @@
           <div class="pane">
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">200</span></div>
-            <pre class="code">{ <span class="k">"injuryTreatment"</span>: { <span class="c">...</span> } }</pre>
+            <pre class="code">{ <span class="k">"casualtyTreatment"</span>: { <span class="c">...</span> } }</pre>
           </div>
         </div>
       </article>
@@ -1137,7 +1137,7 @@
         <h2>Vitals</h2>
         <span class="table-tag">public.vitals</span>
       </div>
-      <p class="desc">Vital-sign readings, one row per event (keyed by <code class="inline">"event-id"</code>, not by <code class="inline">id</code>). Same addressing pattern as <a href="#injuries-treatment">Injuries Treatment</a>: PUT/DELETE/GET all take <code class="inline">:eventId</code>. Note the DB column is spelled <code class="inline">"repiratory-rate"</code> (missing an <em>s</em>) &mdash; the request/response key matches that spelling.</p>
+      <p class="desc">Vital-sign readings, one row per event (keyed by <code class="inline">"event-id"</code>, not by <code class="inline">id</code>). Same addressing pattern as <a href="#casualties-treatment">Casualties Treatment</a>: PUT/DELETE/GET all take <code class="inline">:eventId</code>. Note the DB column is spelled <code class="inline">"repiratory-rate"</code> (missing an <em>s</em>) &mdash; the request/response key matches that spelling.</p>
 
       <article class="endpoint" id="vitals-post">
         <div class="bar">
