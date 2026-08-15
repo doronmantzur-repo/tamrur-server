@@ -355,7 +355,7 @@
   <header class="masthead">
     <p class="eyebrow">Tamrur Server &middot; Internal Reference</p>
     <h1>API Reference</h1>
-    <p>Mass-casualty-incident coordination backend. An <strong>event</strong> is the incident; <strong>casualties</strong> and <strong>evacuations</strong> are logged against it, and <strong>injuries-evac</strong> is the many-to-many join recording which evacuation(s) each casualty used.</p>
+    <p>Mass-casualty-incident coordination backend. An <strong>event</strong> is the incident; <strong>casualties</strong> and <strong>evacuations</strong> are logged against it, and <strong>casualties-evac</strong> is the many-to-many join recording which evacuation(s) each casualty used.</p>
     <div class="meta-row">
       <div><span class="k">Base URL</span><span class="v">http://localhost:8080</span></div>
       <div><span class="k">Format</span><span class="v">application/json</span></div>
@@ -397,11 +397,11 @@
       </ul>
     </div>
     <div class="group">
-      <p class="group-label">Injuries &harr; Evac</p>
+      <p class="group-label">Casualties &harr; Evac</p>
       <ul>
-        <li><a href="#ie-post"><span class="m post">POST</span><span class="p">/injuries-evac</span></a></li>
-        <li><a href="#ie-put"><span class="m put">PUT</span><span class="p">/injuries-evac/:id</span></a></li>
-        <li><a href="#ie-get"><span class="m get">GET</span><span class="p">/injuries-evac/:eventId</span></a></li>
+        <li><a href="#ce-post"><span class="m post">POST</span><span class="p">/casualties-evac</span></a></li>
+        <li><a href="#ce-put"><span class="m put">PUT</span><span class="p">/casualties-evac/:id</span></a></li>
+        <li><a href="#ce-get"><span class="m get">GET</span><span class="p">/casualties-evac/:eventId</span></a></li>
       </ul>
     </div>
     <div class="group">
@@ -902,18 +902,18 @@
       </article>
     </section>
 
-    <!-- ===================== INJURIES-EVAC ===================== -->
-    <section class="resource" id="injuries-evac">
+    <!-- ===================== CASUALTIES-EVAC ===================== -->
+    <section class="resource" id="casualties-evac">
       <div class="head">
-        <h2>Injuries &harr; Evac</h2>
-        <span class="table-tag">public."injuries-evac"</span>
+        <h2>Casualties &harr; Evac</h2>
+        <span class="table-tag">public."casualties-evac"</span>
       </div>
       <p class="desc">Join table linking one casualty to one evacuation within an event. A casualty can have several rows here if it used more than one evacuation.</p>
 
-      <article class="endpoint" id="ie-post">
+      <article class="endpoint" id="ce-post">
         <div class="bar">
           <span class="badge post">POST</span>
-          <span class="path">/injuries-evac</span>
+          <span class="path">/casualties-evac</span>
           <span class="auth-pill required">Bearer required</span>
         </div>
         <p class="summary">Creates one link row. All three ids are foreign keys and must already exist.</p>
@@ -938,7 +938,7 @@
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">201</span></div>
             <pre class="code">{
-  <span class="k">"injuryEvac"</span>: {
+  <span class="k">"casualtyEvac"</span>: {
     <span class="k">"id"</span>: <span class="s">"uuid"</span>,
     <span class="k">"created_at"</span>: <span class="s">"..."</span>,
     <span class="k">"event"</span>: <span class="s">"uuid"</span>,
@@ -952,10 +952,10 @@
         </div>
       </article>
 
-      <article class="endpoint" id="ie-put">
+      <article class="endpoint" id="ce-put">
         <div class="bar">
           <span class="badge put">PUT</span>
-          <span class="path">/injuries-evac/<span class="param">:id</span></span>
+          <span class="path">/casualties-evac/<span class="param">:id</span></span>
           <span class="auth-pill required">Bearer required</span>
         </div>
         <p class="summary">Repoint a link at a different event / injury / evacuation. At least one field.</p>
@@ -975,20 +975,20 @@
           <div class="pane">
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">200</span></div>
-            <pre class="code">{ <span class="k">"injuryEvac"</span>: { <span class="c">...full updated row</span> } }</pre>
+            <pre class="code">{ <span class="k">"casualtyEvac"</span>: { <span class="c">...full updated row</span> } }</pre>
             <div class="status-row"><span class="status s4xx">400</span><span class="msg">at least one field must be provided</span></div>
-            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Injury-evacuation link not found</span></div>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Casualty-evacuation link not found</span></div>
           </div>
         </div>
       </article>
 
-      <article class="endpoint" id="ie-get">
+      <article class="endpoint" id="ce-get">
         <div class="bar">
           <span class="badge get">GET</span>
-          <span class="path">/injuries-evac/<span class="param">:eventId</span></span>
+          <span class="path">/casualties-evac/<span class="param">:eventId</span></span>
           <span class="auth-pill required">Bearer required</span>
         </div>
-        <p class="summary">All injury&ndash;evacuation links for one event, newest first.</p>
+        <p class="summary">All casualty&ndash;evacuation links for one event, newest first.</p>
         <div class="panes">
           <div class="pane">
             <p class="pane-label">Path param</p>
@@ -1000,7 +1000,7 @@
           <div class="pane">
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">200</span></div>
-            <pre class="code">{ <span class="k">"injuryEvacLinks"</span>: [ { <span class="c">...</span> } ] }</pre>
+            <pre class="code">{ <span class="k">"casualtyEvacLinks"</span>: [ { <span class="c">...</span> } ] }</pre>
           </div>
         </div>
       </article>
