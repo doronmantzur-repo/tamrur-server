@@ -15,9 +15,9 @@ function dbError(error, message) {
   return new Error(message);
 }
 
-async function create_injury_treatment(data) {
+async function create_casualty_treatment(data) {
   const query =
-    'INSERT INTO "injuries-treatment" ("event-id", "injury-id", treatment, "recorded-at") VALUES (:eventId, :injuryId, :treatment, COALESCE(:recordedAt, now())) RETURNING *;';
+    'INSERT INTO "casualties-treatment" ("event-id", "injury-id", treatment, "recorded-at") VALUES (:eventId, :injuryId, :treatment, COALESCE(:recordedAt, now())) RETURNING *;';
   try {
     const [result] = await sequelize.query(query, {
       replacements: {
@@ -29,13 +29,13 @@ async function create_injury_treatment(data) {
     });
     return result[0];
   } catch (error) {
-    throw dbError(error, "Error creating injury treatment record");
+    throw dbError(error, "Error creating casualty treatment record");
   }
 }
 
-async function update_injury_treatment(eventId, updates) {
+async function update_casualty_treatment(eventId, updates) {
   const query =
-    'UPDATE "injuries-treatment" SET "injury-id" = COALESCE(:injuryId, "injury-id"), treatment = COALESCE(:treatment, treatment), "recorded-at" = COALESCE(:recordedAt, "recorded-at") WHERE "event-id" = :eventId RETURNING *;';
+    'UPDATE "casualties-treatment" SET "injury-id" = COALESCE(:injuryId, "injury-id"), treatment = COALESCE(:treatment, treatment), "recorded-at" = COALESCE(:recordedAt, "recorded-at") WHERE "event-id" = :eventId RETURNING *;';
   try {
     const [result] = await sequelize.query(query, {
       replacements: {
@@ -47,11 +47,11 @@ async function update_injury_treatment(eventId, updates) {
     });
     const record = result[0];
     if (!record) {
-      throw { status: 404, message: "Injury treatment record not found" };
+      throw { status: 404, message: "Casualty treatment record not found" };
     }
     return record;
   } catch (error) {
-    throw dbError(error, "Error updating injury treatment record");
+    throw dbError(error, "Error updating casualty treatment record");
   }
 }
 
@@ -62,9 +62,9 @@ async function update_injury_treatment(eventId, updates) {
  * which is wrong once a casualty has more than one treatment logged — the
  * medic interface addresses records individually through this instead.
  */
-async function update_injury_treatment_by_id(id, updates) {
+async function update_casualty_treatment_by_id(id, updates) {
   const query =
-    'UPDATE "injuries-treatment" SET "injury-id" = COALESCE(:injuryId, "injury-id"), treatment = COALESCE(:treatment, treatment), "recorded-at" = COALESCE(:recordedAt, "recorded-at") WHERE id = :id RETURNING *;';
+    'UPDATE "casualties-treatment" SET "injury-id" = COALESCE(:injuryId, "injury-id"), treatment = COALESCE(:treatment, treatment), "recorded-at" = COALESCE(:recordedAt, "recorded-at") WHERE id = :id RETURNING *;';
   try {
     const [result] = await sequelize.query(query, {
       replacements: {
@@ -76,25 +76,25 @@ async function update_injury_treatment_by_id(id, updates) {
     });
     const record = result[0];
     if (!record) {
-      throw { status: 404, message: "Injury treatment record not found" };
+      throw { status: 404, message: "Casualty treatment record not found" };
     }
     return record;
   } catch (error) {
-    throw dbError(error, "Error updating injury treatment record");
+    throw dbError(error, "Error updating casualty treatment record");
   }
 }
 
-async function delete_injury_treatment(eventId) {
-  const query = 'DELETE FROM "injuries-treatment" WHERE "event-id" = :eventId RETURNING *;';
+async function delete_casualty_treatment(eventId) {
+  const query = 'DELETE FROM "casualties-treatment" WHERE "event-id" = :eventId RETURNING *;';
   try {
     const [result] = await sequelize.query(query, { replacements: { eventId } });
     const record = result[0];
     if (!record) {
-      throw { status: 404, message: "Injury treatment record not found" };
+      throw { status: 404, message: "Casualty treatment record not found" };
     }
     return record;
   } catch (error) {
-    throw dbError(error, "Error deleting injury treatment record");
+    throw dbError(error, "Error deleting casualty treatment record");
   }
 }
 
@@ -102,27 +102,27 @@ async function delete_injury_treatment(eventId) {
  * Deletes one treatment row by its own primary key, leaving the casualty's
  * other treatments untouched.
  */
-async function delete_injury_treatment_by_id(id) {
-  const query = 'DELETE FROM "injuries-treatment" WHERE id = :id RETURNING *;';
+async function delete_casualty_treatment_by_id(id) {
+  const query = 'DELETE FROM "casualties-treatment" WHERE id = :id RETURNING *;';
   try {
     const [result] = await sequelize.query(query, { replacements: { id } });
     const record = result[0];
     if (!record) {
-      throw { status: 404, message: "Injury treatment record not found" };
+      throw { status: 404, message: "Casualty treatment record not found" };
     }
     return record;
   } catch (error) {
-    throw dbError(error, "Error deleting injury treatment record");
+    throw dbError(error, "Error deleting casualty treatment record");
   }
 }
 
-async function get_injury_treatment_by_event(eventId) {
-  const query = 'SELECT * FROM "injuries-treatment" WHERE "event-id" = :eventId;';
+async function get_casualty_treatment_by_event(eventId) {
+  const query = 'SELECT * FROM "casualties-treatment" WHERE "event-id" = :eventId;';
   try {
     const [result] = await sequelize.query(query, { replacements: { eventId } });
     return result[0] ?? null;
   } catch (error) {
-    throw dbError(error, "Error fetching injury treatment record");
+    throw dbError(error, "Error fetching casualty treatment record");
   }
 }
 
@@ -133,38 +133,38 @@ async function get_injury_treatment_by_event(eventId) {
  * the event's treatments in one request and groups them by "injury-id"
  * client-side rather than issuing one request per casualty.
  */
-async function get_injury_treatments_by_event(eventId) {
+async function get_casualty_treatments_by_event(eventId) {
   const query =
-    'SELECT * FROM "injuries-treatment" WHERE "event-id" = :eventId ORDER BY "recorded-at" DESC;';
+    'SELECT * FROM "casualties-treatment" WHERE "event-id" = :eventId ORDER BY "recorded-at" DESC;';
   try {
     const [result] = await sequelize.query(query, { replacements: { eventId } });
     return result;
   } catch (error) {
-    throw dbError(error, "Error fetching injury treatment records");
+    throw dbError(error, "Error fetching casualty treatment records");
   }
 }
 
 /**
  * Every treatment logged for one casualty, newest first.
  */
-async function get_injury_treatments_by_injury(injuryId) {
+async function get_casualty_treatments_by_injury(injuryId) {
   const query =
-    'SELECT * FROM "injuries-treatment" WHERE "injury-id" = :injuryId ORDER BY "recorded-at" DESC;';
+    'SELECT * FROM "casualties-treatment" WHERE "injury-id" = :injuryId ORDER BY "recorded-at" DESC;';
   try {
     const [result] = await sequelize.query(query, { replacements: { injuryId } });
     return result;
   } catch (error) {
-    throw dbError(error, "Error fetching injury treatment records");
+    throw dbError(error, "Error fetching casualty treatment records");
   }
 }
 
 module.exports = {
-  create_injury_treatment,
-  update_injury_treatment,
-  update_injury_treatment_by_id,
-  delete_injury_treatment,
-  delete_injury_treatment_by_id,
-  get_injury_treatment_by_event,
-  get_injury_treatments_by_event,
-  get_injury_treatments_by_injury,
+  create_casualty_treatment,
+  update_casualty_treatment,
+  update_casualty_treatment_by_id,
+  delete_casualty_treatment,
+  delete_casualty_treatment_by_id,
+  get_casualty_treatment_by_event,
+  get_casualty_treatments_by_event,
+  get_casualty_treatments_by_injury,
 };

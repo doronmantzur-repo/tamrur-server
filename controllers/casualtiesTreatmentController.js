@@ -1,4 +1,4 @@
-const injuriesTreatmentModel = require("../modules/injuriesTreatmentModel.js");
+const casualtiesTreatmentModel = require("../modules/casualtiesTreatmentModel.js");
 
 /**
  * Rejects anything Postgres can't read as a timestamp before it reaches the
@@ -12,7 +12,7 @@ function validateRecordedAt(recordedAt) {
   }
 }
 
-async function create_injury_treatment(req, res, next) {
+async function create_casualty_treatment(req, res, next) {
   try {
     console.log(req.body);
     const { eventId, injuryId, treatment, recordedAt } = req.body;
@@ -23,19 +23,19 @@ async function create_injury_treatment(req, res, next) {
 
     validateRecordedAt(recordedAt);
 
-    const injuryTreatment = await injuriesTreatmentModel.create_injury_treatment({
+    const casualtyTreatment = await casualtiesTreatmentModel.create_casualty_treatment({
       eventId,
       injuryId,
       treatment,
       recordedAt,
     });
-    res.status(201).json({ injuryTreatment });
+    res.status(201).json({ casualtyTreatment });
   } catch (err) {
     next(err);
   }
 }
 
-async function update_injury_treatment(req, res, next) {
+async function update_casualty_treatment(req, res, next) {
   try {
     console.log(req.body);
     const { eventId } = req.params;
@@ -47,12 +47,12 @@ async function update_injury_treatment(req, res, next) {
 
     validateRecordedAt(recordedAt);
 
-    const injuryTreatment = await injuriesTreatmentModel.update_injury_treatment(eventId, {
+    const casualtyTreatment = await casualtiesTreatmentModel.update_casualty_treatment(eventId, {
       injuryId,
       treatment,
       recordedAt,
     });
-    res.status(200).json({ injuryTreatment });
+    res.status(200).json({ casualtyTreatment });
   } catch (err) {
     next(err);
   }
@@ -61,7 +61,7 @@ async function update_injury_treatment(req, res, next) {
 /**
  * Updates a single treatment row, addressed by its own id.
  */
-async function update_injury_treatment_by_id(req, res, next) {
+async function update_casualty_treatment_by_id(req, res, next) {
   try {
     console.log(req.body);
     const { id } = req.params;
@@ -73,22 +73,22 @@ async function update_injury_treatment_by_id(req, res, next) {
 
     validateRecordedAt(recordedAt);
 
-    const injuryTreatment = await injuriesTreatmentModel.update_injury_treatment_by_id(id, {
+    const casualtyTreatment = await casualtiesTreatmentModel.update_casualty_treatment_by_id(id, {
       injuryId,
       treatment,
       recordedAt,
     });
-    res.status(200).json({ injuryTreatment });
+    res.status(200).json({ casualtyTreatment });
   } catch (err) {
     next(err);
   }
 }
 
-async function delete_injury_treatment(req, res, next) {
+async function delete_casualty_treatment(req, res, next) {
   try {
     const { eventId } = req.params;
-    const injuryTreatment = await injuriesTreatmentModel.delete_injury_treatment(eventId);
-    res.status(200).json({ injuryTreatment });
+    const casualtyTreatment = await casualtiesTreatmentModel.delete_casualty_treatment(eventId);
+    res.status(200).json({ casualtyTreatment });
   } catch (err) {
     next(err);
   }
@@ -97,21 +97,21 @@ async function delete_injury_treatment(req, res, next) {
 /**
  * Deletes a single treatment row, addressed by its own id.
  */
-async function delete_injury_treatment_by_id(req, res, next) {
+async function delete_casualty_treatment_by_id(req, res, next) {
   try {
     const { id } = req.params;
-    const injuryTreatment = await injuriesTreatmentModel.delete_injury_treatment_by_id(id);
-    res.status(200).json({ injuryTreatment });
+    const casualtyTreatment = await casualtiesTreatmentModel.delete_casualty_treatment_by_id(id);
+    res.status(200).json({ casualtyTreatment });
   } catch (err) {
     next(err);
   }
 }
 
-async function get_injury_treatment_by_event(req, res, next) {
+async function get_casualty_treatment_by_event(req, res, next) {
   try {
     const { eventId } = req.params;
-    const injuryTreatment = await injuriesTreatmentModel.get_injury_treatment_by_event(eventId);
-    res.status(200).json({ injuryTreatment });
+    const casualtyTreatment = await casualtiesTreatmentModel.get_casualty_treatment_by_event(eventId);
+    res.status(200).json({ casualtyTreatment });
   } catch (err) {
     next(err);
   }
@@ -121,11 +121,11 @@ async function get_injury_treatment_by_event(req, res, next) {
  * Every treatment logged across one event — what the medic interface loads
  * when an event is selected.
  */
-async function get_injury_treatments_by_event(req, res, next) {
+async function get_casualty_treatments_by_event(req, res, next) {
   try {
     const { eventId } = req.params;
-    const injuryTreatments = await injuriesTreatmentModel.get_injury_treatments_by_event(eventId);
-    res.status(200).json({ injuryTreatments });
+    const casualtyTreatments = await casualtiesTreatmentModel.get_casualty_treatments_by_event(eventId);
+    res.status(200).json({ casualtyTreatments });
   } catch (err) {
     next(err);
   }
@@ -134,23 +134,23 @@ async function get_injury_treatments_by_event(req, res, next) {
 /**
  * Every treatment logged for one casualty.
  */
-async function get_injury_treatments_by_injury(req, res, next) {
+async function get_casualty_treatments_by_injury(req, res, next) {
   try {
     const { injuryId } = req.params;
-    const injuryTreatments = await injuriesTreatmentModel.get_injury_treatments_by_injury(injuryId);
-    res.status(200).json({ injuryTreatments });
+    const casualtyTreatments = await casualtiesTreatmentModel.get_casualty_treatments_by_injury(injuryId);
+    res.status(200).json({ casualtyTreatments });
   } catch (err) {
     next(err);
   }
 }
 
 module.exports = {
-  create_injury_treatment,
-  update_injury_treatment,
-  update_injury_treatment_by_id,
-  delete_injury_treatment,
-  delete_injury_treatment_by_id,
-  get_injury_treatment_by_event,
-  get_injury_treatments_by_event,
-  get_injury_treatments_by_injury,
+  create_casualty_treatment,
+  update_casualty_treatment,
+  update_casualty_treatment_by_id,
+  delete_casualty_treatment,
+  delete_casualty_treatment_by_id,
+  get_casualty_treatment_by_event,
+  get_casualty_treatments_by_event,
+  get_casualty_treatments_by_injury,
 };
