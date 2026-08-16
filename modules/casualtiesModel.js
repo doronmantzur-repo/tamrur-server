@@ -36,6 +36,10 @@ const COLUMNS = {
   helivac: '"helivac"',
   isEvacuated: '"is_evacuated"',
   evacuatedAt: '"evacuated_at"',
+  // Written only by the evac-priority inference in evacPriorityModel, never
+  // from a request body — the casualties controller deliberately leaves this
+  // out of its body mapping, so no client can post an AI ranking of its own.
+  aiEvacPriority: '"ai_evacuation_priority"',
 };
 
 /** Columns holding JSON, which need an explicit cast on the bind parameter. */
