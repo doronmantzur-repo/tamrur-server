@@ -77,6 +77,11 @@ function extractPriorities(input) {
  * each casualty row. Only casualties that actually belong to this event are
  * ever updated — any hallucinated/foreign casualtyId in the model's response
  * is dropped rather than trusted.
+ *
+ * The ranking lands in `ai_evacuation_priority`, not the medic's own
+ * `evac-priority`. The two columns sit side by side in the casualty table: the
+ * medic's is edited by hand, this one is advisory and read-only. Writing to
+ * `evac-priority` here would mean every run discarded the medic's own triage.
  */
 async function setEvacPriorities(eventId) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -140,7 +145,7 @@ async function setEvacPriorities(eventId) {
 
   return Promise.all(
     validPriorities.map(({ casualtyId, priority }) =>
-      casualtiesModel.update_casualty(casualtyId, { evacPriority: priority }),
+      casualtiesModel.update_casualty(casualtyId, { aiEvacPriority: priority }),
     ),
   );
 }
