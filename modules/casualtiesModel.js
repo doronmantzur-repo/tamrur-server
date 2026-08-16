@@ -34,10 +34,33 @@ const COLUMNS = {
   ventilation: '"ventilation"',
   escortType: '"escort-type"',
   helivac: '"helivac"',
+  isEvacuated: '"is_evacuated"',
+  evacuatedAt: '"evacuated_at"',
 };
 
 /** Columns holding JSON, which need an explicit cast on the bind parameter. */
 const JSON_COLUMNS = new Set(["treatments"]);
+
+/**
+ * Stamps `evacuated_at` alongside a change to `is_evacuated`.
+ *
+ * The medic just ticks a box; the moment of evacuation is the server's to
+ * record. An explicit `evacuatedAt` from the caller always wins, so a correction
+ * can still be entered by hand.
+ *
+ * @param {Object} fields - camelCase fields about to be written.
+ * @returns {Object} The same fields, with `evacuatedAt` filled in when implied.
+ */
+function withEvacuationTimestamp(fields) {
+  if (fields.isEvacuated === undefined || fields.evacuatedAt !== undefined) {
+    return fields;
+  }
+
+  return {
+    ...fields,
+    evacuatedAt: fields.isEvacuated ? new Date().toISOString() : null,
+  };
+}
 
 /**
  * Turns the provided fields into `column = :param` fragments plus their binds.
@@ -75,7 +98,8 @@ function buildAssignments(fields) {
  * array, `helivac` false) rather than being forced to null.
  */
 async function create_casualty(casualtyData) {
-  const { eventId, ...fields } = casualtyData;
+  const { eventId, ...rest } = casualtyData;
+  const fields = withEvacuationTimestamp(rest);
   const columns = ['"event-id"'];
   const values = [":eventId"];
   const replacements = { eventId };
@@ -126,7 +150,7 @@ async function create_casualty(casualtyData) {
  * Updates a casualty, writing only the fields the caller actually sent.
  */
 async function update_casualty(id, updates) {
-  const { assignments, replacements } = buildAssignments(updates);
+  const { assignments, replacements } = buildAssignments(withEvacuationTimestamp(updates));
 
   if (assignments.length === 0) {
     throw { status: 400, message: "at least one field must be provided" };

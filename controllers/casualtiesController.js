@@ -44,6 +44,8 @@ function validateCasualtyFields(fields) {
     ventilation,
     escortType,
     helivac,
+    isEvacuated,
+    evacuatedAt,
   } = fields;
 
   if (urgency !== undefined && urgency !== null && !URGENCY_VALUES.includes(urgency)) {
@@ -65,6 +67,13 @@ function validateCasualtyFields(fields) {
   assertBoolean(escort, "escort");
   assertBoolean(evacReady, "evac-ready");
   assertBoolean(helivac, "helivac");
+  assertBoolean(isEvacuated, "is_evacuated");
+
+  if (evacuatedAt !== undefined && evacuatedAt !== null) {
+    if (typeof evacuatedAt !== "string" || Number.isNaN(new Date(evacuatedAt).getTime())) {
+      throw { status: 400, message: "evacuated_at must be an ISO 8601 timestamp string" };
+    }
+  }
 
   assertString(description, "description");
   assertString(ventilation, "ventilation");
@@ -115,6 +124,10 @@ function readCasualtyFields(body) {
     ventilation: "ventilation",
     "escort-type": "escortType",
     helivac: "helivac",
+    // Snake_case, matching the columns added for evacuation tracking — the medic
+    // table sends each column under its own name.
+    is_evacuated: "isEvacuated",
+    evacuated_at: "evacuatedAt",
   };
 
   const fields = {};

@@ -50,17 +50,28 @@ const STATUS_VALUES = [
   "completed",
 ];
 
+// Whether the medics are still collecting casualties at the scene. Feeds the
+// event's derived evac_status — see db/migrations/003_evacuation_tracking.sql.
+const GATHERING_STATUS_VALUES = ["in_progress", "completed"];
+
 async function update_event(req, res, next) {
   try {
     console.log(req.body);
     const { id } = req.params;
-    const { name, status, closure_at, type, location, aerialEvac } = req.body;
+    const { name, status, closure_at, type, location, aerialEvac, gatheringStatus } = req.body;
 
-    if (!name && !status && !closure_at && !type && !location && !aerialEvac) {
+    if (!name && !status && !closure_at && !type && !location && !aerialEvac && !gatheringStatus) {
       throw {
         status: 400,
         message:
-          "name, status, closure_at, type, location or aerialEvac required",
+          "name, status, closure_at, type, location, aerialEvac or gatheringStatus required",
+      };
+    }
+
+    if (gatheringStatus !== undefined && !GATHERING_STATUS_VALUES.includes(gatheringStatus)) {
+      throw {
+        status: 400,
+        message: `gatheringStatus must be one of: ${GATHERING_STATUS_VALUES.join(", ")}`,
       };
     }
 
@@ -85,6 +96,7 @@ async function update_event(req, res, next) {
       type,
       location,
       aerialEvac,
+      gatheringStatus,
     });
     res.status(200).json({ event });
   } catch (err) {
