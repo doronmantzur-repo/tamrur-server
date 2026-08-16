@@ -1,7 +1,10 @@
 const casualtiesModel = require("../modules/casualtiesModel.js");
 
 const URGENCY_VALUES = ["non-urgent", "urgent", "expectant", "deceased"];
-const EVAC_ABILITY_VALUES = ["walk", "sit", "lie"];
+// `walk` is retired and no longer accepted on write. The Postgres enum still
+// contains it so rows written before this change stay readable; nothing can
+// create or update a casualty with it any more.
+const EVAC_ABILITY_VALUES = ["sit", "lie"];
 
 /** The escort-type value meaning "no escort needed". */
 const NO_ESCORT = "none";
