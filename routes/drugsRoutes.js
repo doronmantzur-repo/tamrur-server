@@ -1,5 +1,6 @@
 const express = require("express");
 const { authenticate } = require("../middlewares/authenticate.js");
+const { authorize } = require("../middlewares/authorize.js");
 
 const {
   create_drug,
@@ -11,10 +12,10 @@ const {
 
 const router = express.Router();
 
-router.post("/", authenticate, create_drug);
-router.get("/by-event/:eventId", authenticate, get_drugs_by_event);
-router.get("/by-casualty/:casualtyId", authenticate, get_drugs_by_casualty);
-router.put("/record/:id", authenticate, update_drug);
-router.delete("/record/:id", authenticate, delete_drug);
+router.post("/", authenticate, authorize("medic"), create_drug);
+router.get("/by-event/:eventId", authenticate, authorize("brigade", "medic", "supervisor"), get_drugs_by_event);
+router.get("/by-casualty/:casualtyId", authenticate, authorize("brigade", "medic", "supervisor"), get_drugs_by_casualty);
+router.put("/record/:id", authenticate, authorize("medic"), update_drug);
+router.delete("/record/:id", authenticate, authorize("medic"), delete_drug);
 
 module.exports = router;
