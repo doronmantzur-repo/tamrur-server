@@ -9,7 +9,7 @@ function authenticate(req, res, next) {
   const token = authHeader.replace("Bearer ", "");
   try {
     const decodedUser = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decodedUser[0]; // add decoded user in the rquest (so other handlers will have the authentication info)
+    req.user = decodedUser; // add decoded user in the rquest (so other handlers will have the authentication info)
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       throw { status: 401, message: "Token expired." };

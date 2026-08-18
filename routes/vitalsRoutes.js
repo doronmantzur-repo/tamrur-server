@@ -1,5 +1,6 @@
 const express = require("express");
 const { authenticate } = require("../middlewares/authenticate.js");
+const { authorize } = require("../middlewares/authorize.js");
 
 const {
   create_vitals,
@@ -14,21 +15,21 @@ const {
 
 const router = express.Router();
 
-router.post("/", authenticate, create_vitals);
+router.post("/", authenticate, authorize("medic"), create_vitals);
 
 // Two-segment paths first: the single-segment ":eventId" routes below would
 // otherwise never be reached ambiguously, but keeping the specific ones on top
 // makes the precedence obvious to anyone adding routes later.
-router.get("/by-event/:eventId", authenticate, get_vitals_records_by_event);
-router.get("/by-injury/:injuryId", authenticate, get_vitals_records_by_injury);
-router.put("/record/:id", authenticate, update_vitals_by_id);
-router.delete("/record/:id", authenticate, delete_vitals_by_id);
+router.get("/by-event/:eventId", authenticate, authorize("brigade", "medic", "supervisor"), get_vitals_records_by_event);
+router.get("/by-injury/:injuryId", authenticate, authorize("brigade", "medic", "supervisor"), get_vitals_records_by_injury);
+router.put("/record/:id", authenticate, authorize("medic"), update_vitals_by_id);
+router.delete("/record/:id", authenticate, authorize("medic"), delete_vitals_by_id);
 
 // Event-scoped routes, kept for the original single-record-per-event callers.
 // They address *every* row belonging to the event, so prefer the /record and
 // /by-* routes above for anything per-casualty.
-router.put("/:eventId", authenticate, update_vitals);
-router.delete("/:eventId", authenticate, delete_vitals);
-router.get("/:eventId", authenticate, get_vitals_by_event);
+router.put("/:eventId", authenticate, authorize("medic"), update_vitals);
+router.delete("/:eventId", authenticate, authorize("medic"), delete_vitals);
+router.get("/:eventId", authenticate, authorize("brigade", "medic", "supervisor"), get_vitals_by_event);
 
 module.exports = router;
