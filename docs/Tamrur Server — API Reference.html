@@ -376,6 +376,7 @@
       <ul>
         <li><a href="#events-post"><span class="m post">POST</span><span class="p">/events</span></a></li>
         <li><a href="#events-put"><span class="m put">PUT</span><span class="p">/events/:id</span></a></li>
+        <li><a href="#events-close"><span class="m post">POST</span><span class="p">/events/:id/close</span></a></li>
         <li><a href="#events-list"><span class="m get">GET</span><span class="p">/events</span></a></li>
         <li><a href="#events-get"><span class="m get">GET</span><span class="p">/events/:id</span></a></li>
       </ul>
@@ -544,7 +545,7 @@
           <span class="path">/events</span>
           <span class="auth-pill required">Bearer required</span>
         </div>
-        <p class="summary"><code class="inline">status</code> is always set to <code class="inline">evaluated</code> server-side; it cannot be set on create.</p>
+        <p class="summary"><code class="inline">status</code> is always set to <code class="inline">gathering_casualties</code> server-side; it cannot be set on create, and is derived automatically from then on (see the PUT endpoint below).</p>
         <div class="panes">
           <div class="pane">
             <p class="pane-label">Request body</p>
@@ -576,7 +577,7 @@
     <span class="k">"name"</span>: <span class="s">"Battalion 224 event"</span>,
     <span class="k">"type"</span>: <span class="s">"gunfire"</span>,
     <span class="k">"location"</span>: { <span class="c">GeoJSON Point</span> },
-    <span class="k">"status"</span>: <span class="s">"evaluated"</span>,
+    <span class="k">"status"</span>: <span class="s">"gathering_casualties"</span>,
     <span class="k">"closure_at"</span>: null
   }
 }</pre>
@@ -591,7 +592,7 @@
           <span class="path">/events/<span class="param">:id</span></span>
           <span class="auth-pill required">Bearer required</span>
         </div>
-        <p class="summary">Partial update &mdash; only fields you send are changed. Send any one field alone, or several together.</p>
+        <p class="summary">Partial update &mdash; only fields you send are changed. Send any one field alone, or several together. <code class="inline">status</code> is <strong>not</strong> settable here &mdash; it's derived automatically from <code class="inline">gatheringStatus</code> and the casualty evacuation counts; use <a href="#events-close">POST /events/:id/close</a> to close an event.</p>
         <div class="panes">
           <div class="pane">
             <p class="pane-label">Request body &mdash; any combination of</p>
@@ -599,22 +600,59 @@
               <thead><tr><th>Field</th><th>Type</th></tr></thead>
               <tbody>
                 <tr><td class="field">name</td><td>string</td></tr>
-                <tr><td class="field">status</td><td>enum</td></tr>
-                <tr><td class="field">closure_at</td><td>timestamp</td></tr>
                 <tr><td class="field">type</td><td>enum</td></tr>
                 <tr><td class="field">location</td><td>GeoJSON Point</td></tr>
+                <tr><td class="field">aerialEvac</td><td>enum</td></tr>
+                <tr><td class="field">gatheringStatus</td><td>enum</td></tr>
               </tbody>
             </table>
-            <p class="note"><code>status</code> (DB enum, not validated by the controller): evaluated &middot; controlled &middot; ready_for_evacuation &middot; evacuation_started &middot; completed</p>
             <p class="note"><code>type</code>: explosive &middot; gunfire &middot; mortar &middot; anti-tank &middot; phosphorus</p>
-            <pre class="code">{ <span class="k">"closure_at"</span>: <span class="s">"2026-08-11T14:57:40.838Z"</span> }</pre>
+            <p class="note"><code>aerialEvac</code>: no_needed &middot; needed &middot; in_progress &middot; approved &middot; denied</p>
+            <p class="note"><code>gatheringStatus</code>: in_progress &middot; completed &mdash; feeds the derived <code>status</code>/<code>evac_status</code> fields, see the response shape below</p>
+            <pre class="code">{ <span class="k">"gatheringStatus"</span>: <span class="s">"completed"</span> }</pre>
           </div>
           <div class="pane">
             <p class="pane-label">Response</p>
             <div class="status-row"><span class="status s2xx">200</span></div>
-            <pre class="code">{ <span class="k">"event"</span>: { <span class="c">...full updated row</span> } }</pre>
-            <div class="status-row"><span class="status s4xx">400</span><span class="msg">name, status, closure_at, type or location required</span></div>
+            <pre class="code">{
+  <span class="k">"event"</span>: {
+    <span class="c">...full updated row, including derived</span>
+    <span class="k">"status"</span>: <span class="s">"casualties_assessment"</span>,
+    <span class="k">"gathering_status"</span>: <span class="s">"completed"</span>,
+    <span class="k">"evac_status"</span>: <span class="s">"pending"</span>
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">name, type, location, aerialEvac or gatheringStatus required</span></div>
+            <div class="status-row"><span class="status s4xx">400</span><span class="msg">status is derived automatically and cannot be set directly; use POST /events/:id/close to reach 'closed'</span></div>
             <div class="status-row"><span class="status s4xx">404</span><span class="msg">Event not found</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint" id="events-close">
+        <div class="bar">
+          <span class="badge post">POST</span>
+          <span class="path">/events/<span class="param">:id</span>/close</span>
+          <span class="auth-pill required">Bearer required</span>
+        </div>
+        <p class="summary">The one manual, one-way status transition. Only succeeds while the event's current (derived) <code class="inline">status</code> is <code class="inline">full_evacuation</code>; stamps <code class="inline">closure_at</code> server-side. No request body.</p>
+        <div class="panes">
+          <div class="pane">
+            <p class="pane-label">Request body</p>
+            <p class="note">none</p>
+          </div>
+          <div class="pane">
+            <p class="pane-label">Response</p>
+            <div class="status-row"><span class="status s2xx">200</span></div>
+            <pre class="code">{
+  <span class="k">"event"</span>: {
+    <span class="c">...full updated row</span>
+    <span class="k">"status"</span>: <span class="s">"closed"</span>,
+    <span class="k">"closure_at"</span>: <span class="s">"2026-08-19T10:12:03.000Z"</span>
+  }
+}</pre>
+            <div class="status-row"><span class="status s4xx">404</span><span class="msg">Event not found</span></div>
+            <div class="status-row"><span class="status s4xx">409</span><span class="msg">Event must be in full_evacuation status to close</span></div>
           </div>
         </div>
       </article>

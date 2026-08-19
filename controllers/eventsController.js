@@ -1,4 +1,5 @@
 const eventsModel = require("../modules/eventsModel.js");
+const { CLOSED_STATUS } = require("../constants/eventStatus.js");
 
 async function create_event(req, res, next) {
   try {
@@ -42,30 +43,29 @@ const AERIAL_EVAC_VALUES = [
   "approved",
   "denied",
 ];
-const STATUS_VALUES = [
-  "evaluated",
-  "controlled",
-  "ready_for_evacuation",
-  "evacuation_started",
-  "completed",
-];
 
 // Whether the medics are still collecting casualties at the scene. Feeds the
-// event's derived evac_status ('pending' | 'initiated' | 'full') — see
-// db/migrations/006_evac_status_enum.sql.
+// event's derived evac_status and status — see
+// db/migrations/007_event_status_enum.sql.
 const GATHERING_STATUS_VALUES = ["in_progress", "completed"];
 
 async function update_event(req, res, next) {
   try {
     console.log(req.body);
     const { id } = req.params;
-    const { name, status, closure_at, type, location, aerialEvac, gatheringStatus } = req.body;
+    const { name, type, location, aerialEvac, gatheringStatus, status } = req.body;
 
-    if (!name && !status && !closure_at && !type && !location && !aerialEvac && !gatheringStatus) {
+    if (status !== undefined) {
       throw {
         status: 400,
-        message:
-          "name, status, closure_at, type, location, aerialEvac or gatheringStatus required",
+        message: `status is derived automatically and cannot be set directly; use POST /events/:id/close to reach '${CLOSED_STATUS}'`,
+      };
+    }
+
+    if (!name && !type && !location && !aerialEvac && !gatheringStatus) {
+      throw {
+        status: 400,
+        message: "name, type, location, aerialEvac or gatheringStatus required",
       };
     }
 
@@ -73,13 +73,6 @@ async function update_event(req, res, next) {
       throw {
         status: 400,
         message: `gatheringStatus must be one of: ${GATHERING_STATUS_VALUES.join(", ")}`,
-      };
-    }
-
-    if (status !== undefined && !STATUS_VALUES.includes(status)) {
-      throw {
-        status: 400,
-        message: `status must be one of: ${STATUS_VALUES.join(", ")}`,
       };
     }
 
@@ -92,8 +85,6 @@ async function update_event(req, res, next) {
 
     const event = await eventsModel.update_event(id, {
       name,
-      status,
-      closure_at,
       type,
       location,
       aerialEvac,
@@ -105,4 +96,18 @@ async function update_event(req, res, next) {
   }
 }
 
-module.exports = { create_event, list_events, get_event_by_id, update_event };
+// status is otherwise fully derived (see recalc_event_evac_status); closing
+// is the one manual, one-way transition, gated on the event currently being
+// full_evacuation. The model's UPDATE ... WHERE status = 'full_evacuation'
+// is the actual guard; this endpoint just surfaces 404 vs 409 appropriately.
+async function close_event(req, res, next) {
+  try {
+    const { id } = req.params;
+    const event = await eventsModel.close_event(id);
+    res.status(200).json({ event });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { create_event, list_events, get_event_by_id, update_event, close_event };
