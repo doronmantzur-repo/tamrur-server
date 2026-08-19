@@ -1,6 +1,29 @@
 const aerialMissionModel = require("../modules/aerialMissionModel.js");
+const evacuationsModel = require("../modules/evacuationsModel.js");
+const locationsModel = require("../modules/locationsModel.js");
 
 const REQUEST_STATUS_VALUES = ["no_needed", "needed", "in_progress", "approved", "denied"];
+
+/**
+ * Approving a mission means the brigade needs an evacuation row to work
+ * with — ensure_aerial_evacuation creates it if missing (idempotent under
+ * concurrent approvals; see its own docs). Called from both create and
+ * update, since a mission can be approved directly on first creation
+ * (client's create-or-update pattern) as well as via a later update.
+ */
+async function ensureEvacuationForApprovedMission(aerialMission) {
+  if (aerialMission["request-status"] !== "approved") return;
+
+  const locations = await locationsModel.get_locations();
+  const landingPad = locations.find((location) => location.id === aerialMission.landing_pad_id);
+
+  await evacuationsModel.ensure_aerial_evacuation({
+    eventId: aerialMission["event-id"],
+    aerialMissionId: aerialMission.id,
+    forceRadioSign: aerialMission.radio_sign,
+    departurePoint: landingPad?.location,
+  });
+}
 
 async function create_aerial_mission(req, res, next) {
   try {
@@ -21,6 +44,7 @@ async function create_aerial_mission(req, res, next) {
       landingPadId,
       requestStatus,
     });
+    await ensureEvacuationForApprovedMission(aerialMission);
     res.status(201).json({ aerialMission });
   } catch (err) {
     next(err);
@@ -42,6 +66,7 @@ async function update_aerial_mission(req, res, next) {
     }
 
     const aerialMission = await aerialMissionModel.update_aerial_mission(id, { radioSign, landingPadId, requestStatus });
+    await ensureEvacuationForApprovedMission(aerialMission);
     res.status(200).json({ aerialMission });
   } catch (err) {
     next(err);
