@@ -4,7 +4,7 @@ const medicQueryModel = require("../modules/medicQueryModel.js");
 // client can show each retrieval step and the answer's own tokens as they
 // happen rather than only once the whole pipeline finishes.
 async function ask_question(req, res, next) {
-  const { question } = req.body;
+  const { question, history } = req.body;
 
   if (!question || typeof question !== "string") {
     return next({ status: 400, message: "question is required" });
@@ -20,7 +20,7 @@ async function ask_question(req, res, next) {
   }
 
   try {
-    await medicQueryModel.askQuestionStream(question, emit);
+    await medicQueryModel.askQuestionStream(question, emit, { history });
   } catch (err) {
     emit("error", { message: err.message || "השאלה נכשלה" });
   } finally {
