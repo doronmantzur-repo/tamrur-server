@@ -51,7 +51,8 @@ const STATUS_VALUES = [
 ];
 
 // Whether the medics are still collecting casualties at the scene. Feeds the
-// event's derived evac_status — see db/migrations/003_evacuation_tracking.sql.
+// event's derived evac_status ('pending' | 'initiated' | 'full') — see
+// db/migrations/006_evac_status_enum.sql.
 const GATHERING_STATUS_VALUES = ["in_progress", "completed"];
 
 async function update_event(req, res, next) {
