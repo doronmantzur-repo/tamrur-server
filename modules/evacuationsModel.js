@@ -51,6 +51,45 @@ async function update_evacuation(id, updates) {
   }
 }
 
+/**
+ * Ensures exactly one evacuation row exists for an approved aerial mission —
+ * creates it if missing, otherwise returns the row that's already there.
+ * Atomic via the partial unique index on (aerial_mission_id) WHERE NOT NULL:
+ * the INSERT either wins or hits that constraint and is silently skipped
+ * (ON CONFLICT DO NOTHING), so two near-simultaneous approval requests for
+ * the same mission can never both create a row — whichever loses the race
+ * just reads back the winner's row instead. Replaces the old approach of
+ * having each connected client poll-and-create client-side, which had no
+ * way to coordinate across multiple browser tabs/sessions.
+ */
+async function ensure_aerial_evacuation({ eventId, aerialMissionId, forceRadioSign, departurePoint }) {
+  const insertQuery = `
+    INSERT INTO evacuations ("event-id", method, departure_point, force_radio_sign, aerial_mission_id, status)
+    VALUES (:eventId, 'aerial', ST_SetSRID(ST_GeomFromGeoJSON(:departurePoint), 4326)::geography, :forceRadioSign, :aerialMissionId, 'not_started')
+    ON CONFLICT (aerial_mission_id) WHERE aerial_mission_id IS NOT NULL DO NOTHING
+    RETURNING *;
+  `;
+  try {
+    const [inserted] = await sequelize.query(insertQuery, {
+      replacements: {
+        eventId,
+        departurePoint: departurePoint ? JSON.stringify(departurePoint) : null,
+        forceRadioSign: forceRadioSign ?? null,
+        aerialMissionId,
+      },
+    });
+    if (inserted[0]) return inserted[0];
+
+    const [existing] = await sequelize.query(
+      "SELECT * FROM evacuations WHERE aerial_mission_id = :aerialMissionId LIMIT 1;",
+      { replacements: { aerialMissionId } },
+    );
+    return existing[0] ?? null;
+  } catch (error) {
+    throw new Error("Error ensuring aerial evacuation record");
+  }
+}
+
 async function get_evacuations_by_event(eventId) {
   const query = 'SELECT * FROM evacuations WHERE "event-id" = :eventId ORDER BY created_at DESC;';
   try {
@@ -79,6 +118,7 @@ async function delete_evacuation(id) {
 module.exports = {
   create_evacuation,
   update_evacuation,
+  ensure_aerial_evacuation,
   get_evacuations_by_event,
   delete_evacuation,
 };
