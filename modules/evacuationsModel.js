@@ -1,8 +1,16 @@
 const { sequelize } = require("../db/models");
 
+// departure_point/destination_point are PostGIS geography columns — RETURNING/SELECT
+// them raw comes back as WKB, not GeoJSON, so every query here converts them via
+// ST_AsGeoJSON (same as events.location in eventsModel.js) and aliases back to the
+// camelCase names the client already sends in request bodies. Every other column
+// keeps its real DB name (snake_case) — the app's established convention is
+// camelCase in, DB-native names out (see events.gathering_status/evac_status).
+const EVACUATION_COLUMNS = `id, "event-id", created_at, method, ST_AsGeoJSON(departure_point)::json AS "departurePoint", force_radio_sign, status, start_time, eta, concluded_at, aerial_mission_id, ST_AsGeoJSON(destination_point)::json AS "destinationPoint"`;
+
 async function create_evacuation(evacuationData) {
   const query =
-    'INSERT INTO evacuations ("event-id", method, departure_point, force_radio_sign, start_time, eta, aerial_mission_id, destination_point, status) VALUES (:eventId, :method, ST_SetSRID(ST_GeomFromGeoJSON(:departurePoint), 4326)::geography, :forceRadioSign, :startTime, :eta, :aerialMissionId, ST_SetSRID(ST_GeomFromGeoJSON(:destinationPoint), 4326)::geography, \'not_started\') RETURNING *;';
+    `INSERT INTO evacuations ("event-id", method, departure_point, force_radio_sign, start_time, eta, aerial_mission_id, destination_point, status) VALUES (:eventId, :method, ST_SetSRID(ST_GeomFromGeoJSON(:departurePoint), 4326)::geography, :forceRadioSign, :startTime, :eta, :aerialMissionId, ST_SetSRID(ST_GeomFromGeoJSON(:destinationPoint), 4326)::geography, 'not_started') RETURNING ${EVACUATION_COLUMNS};`;
   try {
     const [result] = await sequelize.query(query, {
       replacements: {
@@ -24,7 +32,7 @@ async function create_evacuation(evacuationData) {
 
 async function update_evacuation(id, updates) {
   const query =
-    'UPDATE evacuations SET method = COALESCE(:method, method), departure_point = COALESCE(ST_SetSRID(ST_GeomFromGeoJSON(:departurePoint), 4326)::geography, departure_point), force_radio_sign = COALESCE(:forceRadioSign, force_radio_sign), status = COALESCE(:status, status), start_time = COALESCE(:startTime, start_time), eta = COALESCE(:eta, eta), concluded_at = COALESCE(:concludedAt, concluded_at), aerial_mission_id = COALESCE(:aerialMissionId, aerial_mission_id), destination_point = COALESCE(ST_SetSRID(ST_GeomFromGeoJSON(:destinationPoint), 4326)::geography, destination_point) WHERE id = :id RETURNING *;';
+    `UPDATE evacuations SET method = COALESCE(:method, method), departure_point = COALESCE(ST_SetSRID(ST_GeomFromGeoJSON(:departurePoint), 4326)::geography, departure_point), force_radio_sign = COALESCE(:forceRadioSign, force_radio_sign), status = COALESCE(:status, status), start_time = COALESCE(:startTime, start_time), eta = COALESCE(:eta, eta), concluded_at = COALESCE(:concludedAt, concluded_at), aerial_mission_id = COALESCE(:aerialMissionId, aerial_mission_id), destination_point = COALESCE(ST_SetSRID(ST_GeomFromGeoJSON(:destinationPoint), 4326)::geography, destination_point) WHERE id = :id RETURNING ${EVACUATION_COLUMNS};`;
   try {
     const [result] = await sequelize.query(query, {
       replacements: {
@@ -67,7 +75,7 @@ async function ensure_aerial_evacuation({ eventId, aerialMissionId, forceRadioSi
     INSERT INTO evacuations ("event-id", method, departure_point, force_radio_sign, aerial_mission_id, status)
     VALUES (:eventId, 'aerial', ST_SetSRID(ST_GeomFromGeoJSON(:departurePoint), 4326)::geography, :forceRadioSign, :aerialMissionId, 'not_started')
     ON CONFLICT (aerial_mission_id) WHERE aerial_mission_id IS NOT NULL DO NOTHING
-    RETURNING *;
+    RETURNING ${EVACUATION_COLUMNS};
   `;
   try {
     const [inserted] = await sequelize.query(insertQuery, {
@@ -81,7 +89,7 @@ async function ensure_aerial_evacuation({ eventId, aerialMissionId, forceRadioSi
     if (inserted[0]) return inserted[0];
 
     const [existing] = await sequelize.query(
-      "SELECT * FROM evacuations WHERE aerial_mission_id = :aerialMissionId LIMIT 1;",
+      `SELECT ${EVACUATION_COLUMNS} FROM evacuations WHERE aerial_mission_id = :aerialMissionId LIMIT 1;`,
       { replacements: { aerialMissionId } },
     );
     return existing[0] ?? null;
@@ -91,7 +99,7 @@ async function ensure_aerial_evacuation({ eventId, aerialMissionId, forceRadioSi
 }
 
 async function get_evacuations_by_event(eventId) {
-  const query = 'SELECT * FROM evacuations WHERE "event-id" = :eventId ORDER BY created_at DESC;';
+  const query = `SELECT ${EVACUATION_COLUMNS} FROM evacuations WHERE "event-id" = :eventId ORDER BY created_at DESC;`;
   try {
     const [result] = await sequelize.query(query, { replacements: { eventId } });
     return result;
