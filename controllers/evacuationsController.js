@@ -1,7 +1,6 @@
 const evacuationsModel = require("../modules/evacuationsModel.js");
 
 const METHOD_VALUES = ["walk", "ride", "aerial"];
-const STATUS_VALUES = ["not_started", "started", "completed"];
 
 async function create_evacuation(req, res, next) {
   try {
@@ -49,7 +48,6 @@ async function update_evacuation(req, res, next) {
       method,
       departurePoint,
       forceRadioSign,
-      status,
       startTime,
       eta,
       concludedAt,
@@ -61,7 +59,6 @@ async function update_evacuation(req, res, next) {
       method === undefined &&
       departurePoint === undefined &&
       forceRadioSign === undefined &&
-      status === undefined &&
       startTime === undefined &&
       eta === undefined &&
       concludedAt === undefined &&
@@ -75,15 +72,10 @@ async function update_evacuation(req, res, next) {
       throw { status: 400, message: `method must be one of: ${METHOD_VALUES.join(", ")}` };
     }
 
-    if (status !== undefined && !STATUS_VALUES.includes(status)) {
-      throw { status: 400, message: `status must be one of: ${STATUS_VALUES.join(", ")}` };
-    }
-
     const evacuation = await evacuationsModel.update_evacuation(id, {
       method,
       departurePoint,
       forceRadioSign,
-      status,
       startTime,
       eta,
       concludedAt,
