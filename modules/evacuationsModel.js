@@ -30,24 +30,71 @@ async function create_evacuation(evacuationData) {
   }
 }
 
+// Scalar columns updated 1:1 by name (JS field -> DB column).
+const SCALAR_COLUMNS = {
+  method: "method",
+  forceRadioSign: "force_radio_sign",
+  status: "status",
+  startTime: "start_time",
+  eta: "eta",
+  concludedAt: "concluded_at",
+  aerialMissionId: "aerial_mission_id",
+};
+
+// Geography columns need GeoJSON parsing when set, and can't go through the
+// same replacement slot when cleared (ST_GeomFromGeoJSON has nothing to parse).
+const GEOGRAPHY_COLUMNS = {
+  departurePoint: "departure_point",
+  destinationPoint: "destination_point",
+};
+
+/**
+ * Builds an UPDATE's SET clause + replacements from only the fields actually
+ * present in `updates` (i.e. `!== undefined` — a field the client never
+ * mentioned, since JSON has no way to encode `undefined`, meaning the
+ * controller's destructuring left it out). This is what lets a field be
+ * explicitly cleared: COALESCE-ing every column against its old value
+ * (the previous approach) can't distinguish "the client didn't send this
+ * field" from "the client explicitly cleared it to empty" — both arrive as
+ * SQL NULL, so COALESCE always falls back to the existing value either way.
+ * Building the SET clause only from present keys, and writing a real NULL
+ * for a present-but-falsy value, keeps both cases: an omitted field is
+ * genuinely untouched (a true partial update, e.g. the start-now/finish
+ * quick actions only ever send one or two fields), while an explicitly
+ * cleared field actually becomes NULL.
+ */
+function buildEvacuationUpdate(updates) {
+  const setClauses = [];
+  const replacements = {};
+
+  for (const [field, column] of Object.entries(SCALAR_COLUMNS)) {
+    if (updates[field] === undefined) continue;
+    setClauses.push(`${column} = :${field}`);
+    replacements[field] = updates[field] || null;
+  }
+
+  for (const [field, column] of Object.entries(GEOGRAPHY_COLUMNS)) {
+    if (updates[field] === undefined) continue;
+    if (updates[field]) {
+      setClauses.push(`${column} = ST_SetSRID(ST_GeomFromGeoJSON(:${field}), 4326)::geography`);
+      replacements[field] = JSON.stringify(updates[field]);
+    } else {
+      setClauses.push(`${column} = NULL`);
+    }
+  }
+
+  return { setClauses, replacements };
+}
+
 async function update_evacuation(id, updates) {
-  const query =
-    `UPDATE evacuations SET method = COALESCE(:method, method), departure_point = COALESCE(ST_SetSRID(ST_GeomFromGeoJSON(:departurePoint), 4326)::geography, departure_point), force_radio_sign = COALESCE(:forceRadioSign, force_radio_sign), status = COALESCE(:status, status), start_time = COALESCE(:startTime, start_time), eta = COALESCE(:eta, eta), concluded_at = COALESCE(:concludedAt, concluded_at), aerial_mission_id = COALESCE(:aerialMissionId, aerial_mission_id), destination_point = COALESCE(ST_SetSRID(ST_GeomFromGeoJSON(:destinationPoint), 4326)::geography, destination_point) WHERE id = :id RETURNING ${EVACUATION_COLUMNS};`;
+  const { setClauses, replacements } = buildEvacuationUpdate(updates);
+  if (setClauses.length === 0) {
+    throw { status: 400, message: "at least one field must be provided" };
+  }
+
+  const query = `UPDATE evacuations SET ${setClauses.join(", ")} WHERE id = :id RETURNING ${EVACUATION_COLUMNS};`;
   try {
-    const [result] = await sequelize.query(query, {
-      replacements: {
-        id,
-        method: updates.method ?? null,
-        departurePoint: updates.departurePoint ? JSON.stringify(updates.departurePoint) : null,
-        forceRadioSign: updates.forceRadioSign ?? null,
-        status: updates.status ?? null,
-        startTime: updates.startTime ?? null,
-        eta: updates.eta ?? null,
-        concludedAt: updates.concludedAt ?? null,
-        aerialMissionId: updates.aerialMissionId ?? null,
-        destinationPoint: updates.destinationPoint ? JSON.stringify(updates.destinationPoint) : null,
-      },
-    });
+    const [result] = await sequelize.query(query, { replacements: { ...replacements, id } });
     const evacuation = result[0];
     if (!evacuation) {
       throw { status: 404, message: "Evacuation not found" };
