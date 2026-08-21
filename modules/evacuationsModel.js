@@ -30,11 +30,13 @@ async function create_evacuation(evacuationData) {
   }
 }
 
-// Scalar columns updated 1:1 by name (JS field -> DB column).
+// Scalar columns updated 1:1 by name (JS field -> DB column). `status` is
+// deliberately absent — it's derived from startTime/concludedAt below rather
+// than settable directly, so every caller that changes timing gets the
+// right status for free instead of having to remember to set it themselves.
 const SCALAR_COLUMNS = {
   method: "method",
   forceRadioSign: "force_radio_sign",
-  status: "status",
   startTime: "start_time",
   eta: "eta",
   concludedAt: "concluded_at",
@@ -81,6 +83,20 @@ function buildEvacuationUpdate(updates) {
     } else {
       setClauses.push(`${column} = NULL`);
     }
+  }
+
+  // Status tracks whichever of these two timing fields was actually
+  // touched by this update — concludedAt wins if present (finishing
+  // overrides everything else), otherwise startTime decides, otherwise
+  // both are empty and the evacuation hasn't left yet. This covers every
+  // real caller: start-now sends only startTime, finish sends only
+  // concludedAt, and the edit modal always sends both (plus eta) together,
+  // including as explicit nulls when the user clears a field — so clearing
+  // a finish time correctly reverts status back to "started".
+  if (updates.startTime !== undefined || updates.concludedAt !== undefined) {
+    const status = updates.concludedAt ? "completed" : updates.startTime ? "started" : "not_started";
+    setClauses.push("status = :status");
+    replacements.status = status;
   }
 
   return { setClauses, replacements };
