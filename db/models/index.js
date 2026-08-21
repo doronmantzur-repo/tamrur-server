@@ -3,8 +3,19 @@
 const fs = require("fs");
 const path = require("path");
 const { Sequelize, DataTypes } = require("sequelize");
+const { types } = require("pg");
 
 require("dotenv").config();
+
+// `timestamp without time zone` columns (evacuations.start_time/eta/concluded_at,
+// and any other column of this type) store naive wall-clock digits with no
+// timezone attached. pg's default parser for this type (OID 1114) builds the
+// JS Date by interpreting those digits in *this process's* local timezone —
+// so the exact same stored value reads back differently depending on where
+// the server happens to be running. Every write in this app is already a
+// real UTC instant (toISOString()), so reads need to match: append "Z" to
+// force UTC interpretation instead of the process-local default.
+types.setTypeParser(1114, (value) => (value === null ? null : new Date(`${value}Z`)));
 
 const basename = path.basename(__filename);
 const db = {};
