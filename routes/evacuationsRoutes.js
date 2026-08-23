@@ -13,7 +13,9 @@ const router = express.Router();
 
 router.post("/", authenticate, authorize("brigade"), create_evacuation);
 router.put("/:id", authenticate, authorize("brigade"), update_evacuation);
-router.get("/:eventId", authenticate, authorize("brigade", "airforce"), get_evacuations_by_event);
+// Read-only access for the command dashboard. Deliberately not added to the
+// post/put/delete routes above — command watches, it does not dispatch.
+router.get("/:eventId", authenticate, authorize("brigade", "airforce", "supervisor"), get_evacuations_by_event);
 router.delete("/:id", authenticate, authorize("brigade"), delete_evacuation);
 
 module.exports = router;

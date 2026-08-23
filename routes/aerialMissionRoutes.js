@@ -12,6 +12,8 @@ const router = express.Router();
 
 router.post("/", authenticate, authorize("airforce"), create_aerial_mission);
 router.put("/:id", authenticate, authorize("airforce"), update_aerial_mission);
-router.get("/:eventId", authenticate, authorize("brigade", "airforce"), get_aerial_missions_by_event);
+// Read-only access for the command dashboard; the airforce alone still
+// creates and decides missions.
+router.get("/:eventId", authenticate, authorize("brigade", "airforce", "supervisor"), get_aerial_missions_by_event);
 
 module.exports = router;

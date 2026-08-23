@@ -6,6 +6,7 @@ const { get_forces } = require("../controllers/forcesController");
 
 const router = express.Router();
 
-router.get("/", authenticate, authorize("brigade", "medic", "airforce"), get_forces);
+// Read-only access for the command dashboard; see locationsRoutes.js.
+router.get("/", authenticate, authorize("brigade", "medic", "airforce", "supervisor"), get_forces);
 
 module.exports = router;
