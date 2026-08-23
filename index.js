@@ -16,6 +16,7 @@ const drugsRouter = require("./routes/drugsRoutes.js");
 const aerialMissionRouter = require("./routes/aerialMissionRoutes.js");
 const medicQueryRouter = require("./routes/medicQueryRoutes.js");
 const eventReportRouter = require("./routes/eventReportRoutes.js");
+const medicQueryModel = require("./modules/medicQueryModel.js");
 
 app.use(express.json());
 app.use(
@@ -45,6 +46,17 @@ app.use((err, req, res, next) => {
     statusCode: err.status || 500,
   });
 });
+
+// Kicked off here (not awaited) so the embedding model is loading before the
+// first /medic-query/ask request arrives instead of that request being the
+// one to trigger it — deliberately not blocking app.listen() on this: if it's
+// slow, a delayed port bind risks failing Render's deploy health check, so
+// the port opens immediately and any early request just awaits this same
+// promise via embedQuery instead of the port waiting on it.
+medicQueryModel
+  .loadEmbedder()
+  .then(() => console.log("Embedding model loaded"))
+  .catch((err) => console.error("Failed to load embedding model at boot:", err));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -5,16 +5,28 @@ const Anthropic = require("@anthropic-ai/sdk");
 const EMBEDDING_MODEL = "Xenova/multilingual-e5-base";
 const EMBEDDINGS_FILE = path.join(__dirname, "..", "data", "embeddings.json");
 
-let embedder; // pipeline, loaded once and reused across calls
+let embedderPromise; // the load itself, not just the result — so a boot-time kick-off (see index.js) and an in-request call share one load instead of racing two
+
+/**
+ * Starts (or returns the already-started) load of the embedding pipeline.
+ * Called eagerly at server boot so the model is ready before the first real
+ * request, and awaited again here so a request arriving before that finishes
+ * just waits on the same load instead of triggering a second one.
+ */
+function loadEmbedder() {
+  if (!embedderPromise) {
+    embedderPromise = import("@xenova/transformers").then(({ pipeline }) =>
+      pipeline("feature-extraction", EMBEDDING_MODEL),
+    );
+  }
+  return embedderPromise;
+}
 
 // E5 models are trained on asymmetric query/passage pairs, so the corpus
 // chunks (embedded offline into embeddings.json) and search questions need
 // different prefixes to land in the same space.
 async function embedQuery(question) {
-  const { pipeline } = await import("@xenova/transformers");
-  if (!embedder) {
-    embedder = await pipeline("feature-extraction", EMBEDDING_MODEL);
-  }
+  const embedder = await loadEmbedder();
 
   const output = await embedder(`query: ${question}`, {
     pooling: "mean",
@@ -192,4 +204,4 @@ async function askQuestionStream(question, emit, { history = [], k = 8 } = {}) {
 // Exported so other features (e.g. evacPriorityModel) can retrieve context
 // from the same trauma-book embeddings without loading a second copy of the
 // ONNX embedding model into memory.
-module.exports = { askQuestionStream, embedQuery, retrieveTopK, embeddedChunksPromise };
+module.exports = { askQuestionStream, embedQuery, retrieveTopK, embeddedChunksPromise, loadEmbedder };
