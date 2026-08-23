@@ -23,6 +23,7 @@ async function register(userData) {
     delete user.password;
     return user;
   } catch (error) {
+    console.error("Error registering user:", error);
     throw new Error("Error registering user");
   }
 }
@@ -49,6 +50,7 @@ async function login(userData) {
     delete user.password;
     return user;
   } catch (error) {
+    console.error("Error logging in:", error);
     throw new Error("Error logging in");
   }
 }
