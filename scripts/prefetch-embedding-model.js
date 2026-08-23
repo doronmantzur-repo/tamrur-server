@@ -10,29 +10,13 @@ const { pipeline } = require("@xenova/transformers");
 
 const EMBEDDING_MODEL = "Xenova/multilingual-e5-base";
 
-// A stalled connection to Hugging Face (not a clean failure — just a hang)
-// left this running with no way to finish, blocking `npm install` and the
-// whole Render build indefinitely. Bounding it means the build always moves
-// on, worst case falling back to loading the model lazily at boot/request
-// time, same as before this script existed.
-const TIMEOUT_MS = 90_000;
-
-function timeout(ms) {
-  return new Promise((_, reject) => setTimeout(() => reject(new Error(`Timed out after ${ms}ms`)), ms));
-}
-
 (async () => {
   console.log(`Prefetching embedding model (${EMBEDDING_MODEL})...`);
-  await Promise.race([pipeline("feature-extraction", EMBEDDING_MODEL), timeout(TIMEOUT_MS)]);
+  await pipeline("feature-extraction", EMBEDDING_MODEL);
   console.log("Embedding model cached.");
-})()
-  .catch((err) => {
-    // Non-fatal: don't fail the whole `npm install` over this.
-    console.error("Failed to prefetch embedding model:", err.message || err);
-  })
-  .finally(() => {
-    // A stalled fetch can keep sockets/handles open even after we've given
-    // up above — force the process to exit so this can never hang npm
-    // install (and the whole build) past the timeout.
-    process.exit(0);
-  });
+})().catch((err) => {
+  // Non-fatal: don't fail the whole `npm install` over this. Worst case, the
+  // server falls back to downloading it lazily at boot/request time, same as
+  // before this script existed.
+  console.error("Failed to prefetch embedding model:", err);
+});
