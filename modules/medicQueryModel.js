@@ -2,25 +2,37 @@ const fs = require("fs");
 const path = require("path");
 const Anthropic = require("@anthropic-ai/sdk");
 
-const EMBEDDING_MODEL = "Xenova/multilingual-e5-base";
+const EMBEDDING_MODEL = "voyage-4-lite";
+const VOYAGE_API_URL = "https://api.voyageai.com/v1/embeddings";
 const EMBEDDINGS_FILE = path.join(__dirname, "..", "data", "embeddings.json");
 
-let embedder; // pipeline, loaded once and reused across calls
-
-// E5 models are trained on asymmetric query/passage pairs, so the corpus
-// chunks (embedded offline into embeddings.json) and search questions need
-// different prefixes to land in the same space.
+// Calls Voyage AI's hosted embeddings API instead of running a model
+// in-process — a local ONNX runtime needs far more memory (~900MB+) than
+// this server's host provides. input_type "query" mirrors the corpus's
+// "document" input_type (see pdf-parse/pdf-manager.js), the same purpose
+// e5's "query:"/"passage:" text prefixes used to serve.
 async function embedQuery(question) {
-  const { pipeline } = await import("@xenova/transformers");
-  if (!embedder) {
-    embedder = await pipeline("feature-extraction", EMBEDDING_MODEL);
+  const apiKey = process.env.VOYAGE_API_KEY;
+  if (!apiKey) {
+    throw new Error("Missing VOYAGE_API_KEY environment variable");
   }
 
-  const output = await embedder(`query: ${question}`, {
-    pooling: "mean",
-    normalize: true,
+  const response = await fetch(VOYAGE_API_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ input: [question], model: EMBEDDING_MODEL, input_type: "query" }),
   });
-  return Array.from(output.data);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Voyage embeddings request failed (${response.status}): ${errorText}`);
+  }
+
+  const { data } = await response.json();
+  return data[0].embedding;
 }
 
 // Loaded once at startup; kept in memory for the process lifetime.
